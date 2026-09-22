@@ -2,6 +2,8 @@ name: Public setup and install journey
 run-name: Browser Bolt journey ${{ inputs.launch_id || 'scheduled' }}
 
 on:
+  push:
+    branches: [browser-bolt]
   schedule:
     - cron: '17 10 * * *'
   workflow_dispatch:
@@ -44,7 +46,7 @@ concurrency:
 
 jobs:
   journey:
-    if: github.event.repository.private == false && vars.BOLT_CANARY_ENABLED == 'true'
+    if: github.event.repository.private == false && vars.BOLT_CANARY_ENABLED == 'true' && (github.event_name == 'workflow_dispatch' || github.event_name == 'schedule')
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:

@@ -2,6 +2,8 @@ name: Public static canary
 run-name: Browser Bolt canary ${{ inputs.launch_id || 'scheduled' }}
 
 on:
+  push:
+    branches: [browser-bolt]
   schedule:
     - cron: '2-57/5 * * * *'
   workflow_dispatch:
@@ -51,7 +53,7 @@ concurrency:
 
 jobs:
   probe:
-    if: github.event.repository.private == false && vars.BOLT_CANARY_ENABLED == 'true'
+    if: github.event.repository.private == false && vars.BOLT_CANARY_ENABLED == 'true' && (github.event_name == 'workflow_dispatch' || github.event_name == 'schedule')
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
