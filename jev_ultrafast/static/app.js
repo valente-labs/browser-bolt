@@ -17,7 +17,7 @@ const escape = (value) =>
         c
       ],
   );
-const percent = (value) => `${(value * 100).toFixed(value < 0.01 ? 1 : 0)}%`;
+const percent = (value) => value == null ? "Unavailable" : `${(value * 100).toFixed(value < 0.01 ? 1 : 0)}%`;
 async function call(name, body = {}) {
   const response = await fetch(`/api/${name}`, {
     method: "POST",
@@ -68,6 +68,7 @@ async function perform(fn, label) {
 }
 function render() {
   if (!state) return;
+  $("model-tag").textContent = `Policy: ${state.policy || "hybrid"}`;
   $("helper").textContent = `Text helper · ${state.text_model}`;
   $("plan").innerHTML = (state.plan || [])
     .map(
@@ -83,7 +84,7 @@ function render() {
     idle: "Ready to explore",
     ready: "Page observed · ready for a decision",
     predicted: "Choice ready · inspect or execute",
-    done: "Jev reports complete · inspect the page",
+    done: "Agent reports complete · verify the page",
     blocked: "Stopped · no supported next action",
   };
   $("status").textContent = labels[state.status] || state.status;
@@ -104,7 +105,7 @@ function render() {
   $("latency").textContent = d ? `${d.latency_ms} ms` : "—";
   $("confidence").textContent = d?.target_confidence != null ? percent(d.target_confidence) : "—";
   $("completion").textContent = d ? d.operation : "—";
-  $("ranking-note").textContent = d ? "Ranked by Jev" : "Unranked";
+  $("ranking-note").textContent = d ? (d.routing?.route === "qwen" ? "Chosen by Cerebras Qwen" : "Ranked by Jev") : "Unranked";
   const op = Object.entries(d?.operation_probabilities || {}).sort((a,b)=>b[1]-a[1]);
   $("operation-choices").innerHTML = op.map(([name,p]) =>
     `<span class="operation-choice ${name === d.operation ? 'best' : ''}">${escape(name)} <b>${percent(p)}</b></span>`).join('');

@@ -1,0 +1,12 @@
+<!doctype html><meta charset="utf-8"><title>Parcel Demo checkout</title>
+<style>body{font:16px system-ui;background:#f3f5f7;color:#16202b;margin:0}main{max-width:640px;margin:48px auto;padding:32px;background:white;border-radius:16px}label{display:block;margin:16px 0}input[type=text]{display:block;padding:12px;width:90%;margin-top:6px}button{padding:12px 22px;margin:12px 8px 0 0}aside{padding:16px;background:#f0f4f6}</style>
+<main><h1>Delivery details</h1><p>Step 1 of 4. Synthetic checkout. No order or charge will be created.</p><aside>Demo backpack · $40</aside><label>Full name<input id="full-name" type="text"></label><label>Street address<input id="street" type="text"></label><button id="continue">Continue to shipping</button></main>
+<script>
+const main=document.querySelector('main');const order={};
+function button(label,fn){const b=document.createElement('button');b.textContent=label;b.onclick=fn;main.append(b)}
+function heading(text,step){main.replaceChildren();const h=document.createElement('h1');h.textContent=text;main.append(h);const p=document.createElement('p');p.textContent=step;main.append(p)}
+function option(name,value,label){const l=document.createElement('label'),i=document.createElement('input');i.type='radio';i.name=name;i.value=value;l.append(i,document.createTextNode(label));main.append(l)}
+function shipping(){heading('Shipping speed','Step 2 of 4');option('shipping','Standard','Standard · Free');option('shipping','Express','Express · $5');button('Continue to payment',()=>{const i=main.querySelector('input:checked');if(i){order.shipping=i.value;payment()}})}
+function payment(){heading('Payment method','Step 3 of 4. Demo methods only.');option('payment','Demo card 4242','Demo card ending 4242');option('payment','Demo wallet','Demo wallet');button('Review order',()=>{const i=main.querySelector('input:checked');if(!i)return;order.payment=i.value;main.replaceChildren();const h=document.createElement('h1');h.textContent='Order reviewed';main.append(h);for(const value of [order.name,order.street,order.shipping,order.payment]){const p=document.createElement('p');p.textContent=value;main.append(p)}const span=document.createElement('small');span.textContent='Review complete. No purchase was made.';main.append(span)})}
+document.querySelector('#continue').onclick=()=>{const name=document.querySelector('#full-name').value.trim(),street=document.querySelector('#street').value.trim();if(!name||!street)return;order.name=name;order.street=street;shipping()};
+</script>

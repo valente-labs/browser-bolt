@@ -1,0 +1,42 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:05.000
+Earlier benchmark: 5× Astra, 7× Opus rounded.
+Six attempts/route, three native synthetic tasks.
+
+2
+00:00:05.000 --> 00:00:10.000
+Actual local setup page. Add your provider key in your host.
+Goals and selected page context can go to your provider.
+
+3
+00:00:10.000 --> 00:00:15.000
+New live runs: Jev + OpenRouter Qwen and Jev + Cerebras Qwen.
+One synthetic checkout per route, original capture speed.
+
+4
+00:00:15.000 --> 00:00:23.000
+New live runs: Astra and Opus 5, both through OpenRouter.
+Recorded sequentially, aligned at first visible fixture.
+
+5
+00:00:23.000 --> 00:00:31.000
+Capture clocks are not task time.
+Leading blank capture omitted; original frame intervals retained.
+
+6
+00:00:31.000 --> 00:00:39.000
+Task time excludes starting the CLI/MCP process.
+All four new runs independently verified the synthetic result.
+
+7
+00:00:39.000 --> 00:00:48.000
+API cost for the new single runs. OpenRouter usage reported.
+Cerebras Qwen estimated; service costs excluded.
+
+8
+00:00:48.000 --> 00:00:53.000
+Get the code: https://github.com/valente-labs/browser-bolt
+Setup guide: docs/HOST.md. Start with synthetic data.
+

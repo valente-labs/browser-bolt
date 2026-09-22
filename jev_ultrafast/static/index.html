@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="demo-token" content="__TOKEN__" />
-    <title>Jev Ultrafast · Browser Use</title>
+    <title>Jev Qwerebras Ultrafast · Browser Use</title>
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
     <link rel="stylesheet" href="/style.css" />
   </head>
@@ -13,7 +13,7 @@
       <a href="/" aria-label="Homepage" class="brand"
         >browser<span>use</span> <i>×</i> TypeSafe</a
       >
-      <div class="local"><span class="dot"></span> Jev Ultrafast</div>
+      <div class="local"><span class="dot"></span> Jev Qwerebras Ultrafast</div>
     </header>
     <main>
       <section class="intro">
@@ -21,24 +21,24 @@
           <p class="eyebrow">A BROWSER THAT CHOOSES</p>
           <h1>Every page is a set of possibilities.</h1>
           <p>
-            Jev picks the next action. A small language model handles the words.
-            <a href="/demo.mp4" target="_blank" rel="noopener">Watch the real Google Flights run ↗</a>
+            Jev chooses actions. Cerebras Qwen writes text and handles decision fallback.
+            <a href="/demo.mp4" target="_blank" rel="noopener">Watch the upstream Google Flights demo ↗</a>
           </p>
         </div>
-        <div class="model-tag">jev-latest <span>+ text helper</span></div>
+        <div class="model-tag" id="model-tag">Jev + Cerebras Qwen</div>
       </section>
       <form id="task-form">
         <div class="task-label">
           <label for="goal">Give it a task</label
           ><select id="scenario" name="scenario" aria-label="Demo scenario">
             <option value="flights">Google Flights · real web</option>
-            <option value="travel">Travel planner · fixture</option>
+            <option value="travel" selected>Travel planner · fixture</option>
             <option value="research">Reading room · fixture</option>
           </select>
         </div>
         <div class="task-row">
           <textarea id="goal" name="goal" rows="5">
-Find one-way flights from Zurich to London on September 20, 2026, for one adult in economy. Stop when matching flight options are visible. Do not select or book a flight.</textarea
+Find a Design stay in Lisbon with Free cancellation and open Casa Flora.</textarea
           ><button type="submit" id="start" class="primary">
             Start demo <span>↗</span>
           </button>
@@ -85,7 +85,7 @@ Find one-way flights from Zurich to London on September 20, 2026, for one adult 
           </div>
           <div class="browser-footer">
             <span id="page-title">Isolated demo tab</span
-            ><span>AX tree → typed actions → CDP</span>
+            ><span>DOM → observed actions → browser</span>
           </div>
         </div>
         <aside>
@@ -116,7 +116,7 @@ Find one-way flights from Zurich to London on September 20, 2026, for one adult 
             <p class="muted">Available actions will appear here.</p>
           </div>
           <p class="aside-note">
-            Operation and target are separate choices in one request.<br />Text is generated only for TYPE_TEXT.
+            Jev chooses operation and target in one request.<br />Qwen can choose an action and generate its text together.
           </p>
         </aside>
       </section>
@@ -135,7 +135,7 @@ Find one-way flights from Zurich to London on September 20, 2026, for one adult 
 Start a demo to inspect its structured state.</pre>
       </details>
       <footer>
-        <span>Browser Use × TypeSafe · Experimental baseline</span
+        <span>Valente Labs experimental fork · Browser Use × TypeSafe + Cerebras</span
         ><span id="helper">Text helper loading</span>
       </footer>
     </main>

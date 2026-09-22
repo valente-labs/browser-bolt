@@ -1,0 +1,9 @@
+<!doctype html><meta charset="utf-8"><title>Demo discount validation</title>
+<style>body{font:16px system-ui;background:#f2f4f8}main{max-width:640px;margin:48px auto;padding:32px;background:white;border-radius:16px}label{display:block;margin:16px 0}input{display:block;padding:12px}button{padding:12px 20px}[role=alert]{color:#a32424}</style>
+<main><h1>Review your discount</h1><p role="alert">EXPIRED is no longer valid. Replace the code and apply it.</p><label>Discount code<input id="code" value="EXPIRED"></label><button id="apply">Apply code</button><p id="result">No discount applied</p><button id="review" disabled>Review total</button></main>
+<script>
+const code=document.querySelector('#code'),apply=document.querySelector('#apply'),review=document.querySelector('#review');let approved=false;
+code.addEventListener('input',()=>{approved=false;review.disabled=true});
+apply.onclick=()=>{apply.disabled=true;document.querySelector('#result').textContent='Checking discount…';setTimeout(()=>{approved=code.value==='DEMO10';document.querySelector('#result').textContent=approved?'10% discount applied':'Code not accepted';document.querySelector('[role=alert]').textContent=approved?'':'Enter a valid discount code';review.disabled=!approved;apply.disabled=false},150)};
+review.onclick=()=>{if(!approved)return;const main=document.querySelector('main');main.replaceChildren();const h=document.createElement('h1');h.textContent='Discount reviewed';main.append(h);for(const value of ['DEMO10','10%','$36.00']){const p=document.createElement('p');p.textContent=value;main.append(p)}};
+</script>

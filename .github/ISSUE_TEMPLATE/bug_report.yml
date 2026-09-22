@@ -1,0 +1,55 @@
+name: Bug report
+description: Report a reproducible problem using synthetic data.
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use synthetic data only. Do not include keys, tokens, account IDs, environment files, customer pages, or browser profiles. Follow SECURITY.md for vulnerabilities; do not put sensitive exploit details in this form.
+  - type: textarea
+    id: versions
+    attributes:
+      label: Version and environment
+      description: Release tag or commit, OS, Python and uv versions. Add host, Chrome and Browser Harness versions when relevant.
+      placeholder: "Browser Bolt version or commit; OS; Python; uv; host/browser versions"
+    validations:
+      required: true
+  - type: input
+    id: profile
+    attributes:
+      label: Mode and profile
+      description: Name the command or surface and selected profile. Use not applicable for installation or docs bugs. Do not include account identifiers.
+      placeholder: "Reference host preflight; or live checkout with jev_qwen_openrouter"
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Synthetic reproduction
+      description: Give the smallest fixture and steps that reproduce the problem. Replace sensitive inputs before posting. Live provider calls are optional and incur charges.
+      placeholder: "1. Install version ...
+2. Run ... with synthetic fixture ...
+3. Observe ..."
+    validations:
+      required: true
+  - type: textarea
+    id: expected_actual
+    attributes:
+      label: Expected and observed behavior
+      description: Include the final observed fixture state. A model DONE response alone does not prove success. Note timeouts, cancellation and cleanup errors.
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Safe diagnostics and cost context
+      description: Optional reviewed error codes, timing, action/model-call counts, and sanitized excerpts. If reporting cost, give only the numeric amount and whether it was reported, estimated, or unknown. Do not attach invoices, account screenshots, raw traces, keys, or environment dumps.
+    validations:
+      required: false
+  - type: checkboxes
+    id: privacy_review
+    attributes:
+      label: Before submitting
+      options:
+        - label: This report uses synthetic data and contains no credentials, account identifiers, customer content, or private browser material.
+          required: true

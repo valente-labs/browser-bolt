@@ -1,0 +1,118 @@
+{
+  "transport": "real stdio MCP + host native Agent/Browser Harness",
+  "row": {
+    "trial_id": "mcp-smoke",
+    "profile": "jev",
+    "task": "choice",
+    "status": "done",
+    "success": true,
+    "verified": true,
+    "setup_seconds": 0.041248374996939674,
+    "task_seconds": 1.1477077080053277,
+    "decisions": [
+      {
+        "choice": "e2",
+        "operation": "CLICK",
+        "target": "2",
+        "confidence": null,
+        "elapsed_ms": 557,
+        "model_calls": [
+          {
+            "provider": "openrouter",
+            "model": "typesafe/jev-1.13",
+            "success": true,
+            "latency_ms": 521,
+            "usage": {
+              "cost": 5.3886e-05
+            },
+            "cost_usd": 5.3886e-05,
+            "cost_basis": "reported"
+          }
+        ]
+      },
+      {
+        "choice": "e3",
+        "operation": "CLICK",
+        "target": "3",
+        "confidence": null,
+        "elapsed_ms": 784,
+        "model_calls": [
+          {
+            "provider": "openrouter",
+            "model": "typesafe/jev-1.13",
+            "success": true,
+            "latency_ms": 187,
+            "usage": {
+              "cost": 5.5146e-05
+            },
+            "cost_usd": 5.5146e-05,
+            "cost_basis": "reported"
+          }
+        ]
+      },
+      {
+        "choice": "DONE",
+        "operation": "DONE",
+        "target": null,
+        "confidence": null,
+        "elapsed_ms": 1145,
+        "model_calls": [
+          {
+            "provider": "openrouter",
+            "model": "typesafe/jev-1.13",
+            "success": true,
+            "latency_ms": 312,
+            "usage": {
+              "cost": 2.9946e-05
+            },
+            "cost_usd": 2.9946e-05,
+            "cost_basis": "reported"
+          }
+        ]
+      }
+    ],
+    "text_calls": [],
+    "model_calls": [
+      {
+        "provider": "openrouter",
+        "model": "typesafe/jev-1.13",
+        "success": true,
+        "latency_ms": 521,
+        "usage": {
+          "cost": 5.3886e-05
+        },
+        "cost_usd": 5.3886e-05,
+        "cost_basis": "reported"
+      },
+      {
+        "provider": "openrouter",
+        "model": "typesafe/jev-1.13",
+        "success": true,
+        "latency_ms": 187,
+        "usage": {
+          "cost": 5.5146e-05
+        },
+        "cost_usd": 5.5146e-05,
+        "cost_basis": "reported"
+      },
+      {
+        "provider": "openrouter",
+        "model": "typesafe/jev-1.13",
+        "success": true,
+        "latency_ms": 312,
+        "usage": {
+          "cost": 2.9946e-05
+        },
+        "cost_usd": 2.9946e-05,
+        "cost_basis": "reported"
+      }
+    ],
+    "model_call_count": 3,
+    "action_count": 2,
+    "unknown_cost_call_count": 0,
+    "reported_cost_usd": 0.000138978,
+    "estimated_cerebras_cost_usd": 0,
+    "total_cost_usd": 0.000138978,
+    "wall_seconds": 1.1894262499990873
+  }
+}

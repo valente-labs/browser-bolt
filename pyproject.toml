@@ -1,17 +1,24 @@
 [project]
-name = "jev-ultrafast"
+name = "jev-qwerebras-ultrafast"
 version = "0.1.0"
-description = "A browser agent that chooses instead of generating."
+description = "Jev browser decisions with a Cerebras Qwen co-model and bounded fallback."
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.12"
 dependencies = ["browser-harness==0.1.13", "httpx[http2]>=0.28,<1"]
 
+[project.optional-dependencies]
+mcp = ["mcp>=2.2,<3"]
+
 [project.scripts]
+jev-qwerebras-mcp = "jev_ultrafast.mcp_server:main"
+jev-qwerebras-host = "jev_ultrafast.mcp_host:main"
+jev-qwerebras-benchmark = "jev_ultrafast.benchmark:main"
+jev-qwerebras = "jev_ultrafast.demo:main"
 jev = "jev_ultrafast.demo:main"
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling==1.32.4"]
 build-backend = "hatchling.build"
 
 [dependency-groups]
@@ -25,3 +32,26 @@ select = ["E", "F", "I"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["jev_ultrafast"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "/jev_ultrafast/**", "/tests/**", "/README.md", "/LICENSE", "/SECURITY.md",
+  "/BENCHMARK.md", "/HYBRID.md", "/pyproject.toml", "/uv.lock", "/.env.example",
+  "/requirements-mcp.txt", "/sbom-mcp.cdx.json",
+  "/docs/MCP.md", "/docs/COMPARISON.md", "/docs/NATIVE_COMPARISON.md",
+  "/docs/SPRINTS.md", "/docs/UPSTREAM-README.md", "/docs/benchmarks/*.json",
+  "/local/comparison_probe.py", "/local/static_canary.py", "/local/run_hybrid.py",
+  "/local/wheel_smoke.py", "/local/fixtures/**",
+  "/examples/flights.py", "/docs/HOST.md", "/docs/LIVE_HOST.md", "/local/release.py", "/docs/RELEASE.md",
+  "/local/recovery.py", "/docs/RECOVERY.md", "/local/monitor.py", "/docs/MONITORING.md",
+  "/local/public_journey.py", "/local/activate_monitoring.py", "/docs/MONITOR_ACTIVATION.md",
+  "/.github/workflows/public-ci.yml", "/.github/workflows/public-canary.yml", "/.github/workflows/public-journey.yml",
+  "/site/build-static.mjs", "/site/public/index.html", "/site/public/assets/public-app.js",
+  "/site/public/assets/brand.js", "/site/public/assets/styles.css", "/site/public/assets/brand/browser-bolt.png",
+  "/local/launch.py", "/docs/LAUNCH_COMMAND.md",
+  "/local/browser_driver.js", "/CONTRIBUTING.md", "/CHANGELOG.md", "/CODE_OF_CONDUCT.md",
+  "/.github/ISSUE_TEMPLATE/*.yml", "/site/public/assets/demo/*",
+]

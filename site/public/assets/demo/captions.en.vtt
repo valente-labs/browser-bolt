@@ -1,0 +1,66 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:06.000
+Earlier benchmark: 5× Astra, 7× Opus rounded.
+Jev + OpenRouter Qwen; 6 attempts/route, 3 synthetic native tasks.
+
+2
+00:00:06.000 --> 00:00:15.000
+Your host observes the page and checks the actual result.
+Browser Bolt chooses an action or writes field text.
+
+3
+00:00:15.000 --> 00:00:20.000
+Choose a provider route. Add keys in your local host,
+outside this website.
+
+4
+00:00:20.000 --> 00:00:25.000
+Direct Cerebras uses two provider keys.
+Its route is distinct from OpenRouter.
+
+5
+00:00:25.000 --> 00:00:30.000
+The OpenRouter route uses one key.
+Follow the reference host guide for setup.
+
+6
+00:00:30.000 --> 00:00:35.000
+Copy the configuration.
+Copying does not connect your host.
+
+7
+00:00:35.000 --> 00:00:40.000
+Goals, selected page context and action history
+can go to your provider.
+
+8
+00:00:40.000 --> 00:00:45.000
+Start with synthetic data. Your host executes each action
+and checks the actual result.
+
+9
+00:00:45.000 --> 00:00:53.000
+Four separate live routes. One synthetic checkout per route.
+Recorded sequentially, aligned at the first visible fixture.
+
+10
+00:00:53.000 --> 00:01:01.000
+Original capture speed. Clocks measure time from the first visible frame.
+The initial blank frame was omitted.
+
+11
+00:01:01.000 --> 00:01:09.000
+Task time includes browser setup and verification;
+it excludes starting the CLI/MCP process. All four verified.
+
+12
+00:01:09.000 --> 00:01:18.000
+API cost per checkout. OpenRouter reported; Cerebras Qwen estimated.
+Hosting, service overhead, support and payment costs excluded.
+
+13
+00:01:18.000 --> 00:01:23.000
+Get the code. https://github.com/valente-labs/browser-bolt
+Setup guide: docs/HOST.md. Start with synthetic data.

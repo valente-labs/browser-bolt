@@ -1,0 +1,1082 @@
+[
+  {
+    "model": "jev",
+    "connection": "fresh",
+    "trial": 0,
+    "warmup": true,
+    "success": true,
+    "routing": {
+      "policy": "jev",
+      "route": "jev",
+      "fallback": false,
+      "reason": null,
+      "model_calls": [
+        {
+          "provider": "jev",
+          "model": "typesafe/jev-1.13-20260917",
+          "latency_ms": 260,
+          "usage": {
+            "input_tokens": 1033,
+            "output_tokens": 62,
+            "cost": 4.3386e-05
+          },
+          "success": true
+        }
+      ],
+      "latency_ms": 260,
+      "jev_latency_ms": 260,
+      "fallback_latency_ms": 0,
+      "jev_usage": {
+        "input_tokens": 1033,
+        "output_tokens": 62,
+        "cost": 4.3386e-05
+      },
+      "fallback_usage": {}
+    },
+    "seconds": 0.25958820800588,
+    "tcp_connects": 1,
+    "http_version": "HTTP/2"
+  },
+  {
+    "model": "jev",
+    "connection": "pooled",
+    "trial": 0,
+    "warmup": true,
+    "success": true,
+    "routing": {
+      "policy": "jev",
+      "route": "jev",
+      "fallback": false,
+      "reason": null,
+      "model_calls": [
+        {
+          "provider": "jev",
+          "model": "typesafe/jev-1.13-20260917",
+          "latency_ms": 276,
+          "usage": {
+            "input_tokens": 1033,
+            "output_tokens": 62,
+            "cost": 4.3386e-05
+          },
+          "success": true
+        }
+      ],
+      "latency_ms": 276,
+      "jev_latency_ms": 276,
+      "fallback_latency_ms": 0,
+      "jev_usage": {
+        "input_tokens": 1033,
+        "output_tokens": 62,
+        "cost": 4.3386e-05
+      },
+      "fallback_usage": {}
+    },
+    "seconds": 0.27573437499813735,
+    "tcp_connects": 1,
+    "http_version": "HTTP/2"
+  },
+  {
+    "model": "qwen",
+    "connection": "fresh",
+    "trial": 0,
+    "warmup": true,
+    "success": true,
+    "routing": {
+      "policy": "qwen",
+      "route": "qwen",
+      "fallback": false,
+      "reason": null,
+      "model_calls": [
+        {
+          "provider": "qwen",
+          "model": "qwen-3.8-27b",
+          "latency_ms": 293,
+          "usage": {
+            "total_tokens": 450,
+            "completion_tokens": 18,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "prompt_tokens": 432,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "image_tokens": 0
+            }
+          },
+          "success": true
+        }
+      ],
+      "latency_ms": 293,
+      "jev_latency_ms": 0,
+      "fallback_latency_ms": 293,
+      "jev_usage": {},
+      "fallback_usage": {
+        "total_tokens": 450,
+        "completion_tokens": 18,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 432,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "image_tokens": 0
+        }
+      }
+    },
+    "seconds": 0.29325345800316427,
+    "tcp_connects": 1,
+    "http_version": "HTTP/2"
+  },
+  {
+    "model": "qwen",
+    "connection": "pooled",
+    "trial": 0,
+    "warmup": true,
+    "success": true,
+    "routing": {
+      "policy": "qwen",
+      "route": "qwen",
+      "fallback": false,
+      "reason": null,
+      "model_calls": [
+        {
+          "provider": "qwen",
+          "model": "qwen-3.8-27b",
+          "latency_ms": 348,
+          "usage": {
+            "total_tokens": 450,
+            "completion_tokens": 18,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "prompt_tokens": 432,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "image_tokens": 0
+            }
+          },
+          "success": true
+        }
+      ],
+      "latency_ms": 348,
+      "jev_latency_ms": 0,
+      "fallback_latency_ms": 348,
+      "jev_usage": {},
+      "fallback_usage": {
+        "total_tokens": 450,
+        "completion_tokens": 18,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 432,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "image_tokens": 0
+        }
+      }
+    },
+    "seconds": 0.34816670800501015,
+    "tcp_connects": 1,
+    "http_version": "HTTP/2"
+  },
+  {
+    "model": "qwen",
+    "connection": "pooled",
+    "trial": 1,
+    "warmup": false,
+    "success": true,
+    "routing": {
+      "policy": "qwen",
+      "route": "qwen",
+      "fallback": false,
+      "reason": null,
+      "model_calls": [
+        {
+          "provider": "qwen",
+          "model": "qwen-3.8-27b",
+          "latency_ms": 203,
+          "usage": {
+            "total_tokens": 450,
+            "completion_tokens": 18,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "prompt_tokens": 432,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "image_tokens": 0
+            }
+          },
+          "success": true
+        }
+      ],
+      "latency_ms": 203,
+      "jev_latency_ms": 0,
+      "fallback_latency_ms": 203,
+      "jev_usage": {},
+      "fallback_usage": {
+        "total_tokens": 450,
+        "completion_tokens": 18,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 432,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "image_tokens": 0
+        }
+      }
+    },
+    "seconds": 0.20325516600860283,
+    "tcp_connects": 0,
+    "http_version": "HTTP/2"
+  },
+  {
+    "model": "qwen",
+    "connection": "fresh",
+    "trial": 1,
+    "warmup": false,
+    "success": true,
+    "routing": {
+      "policy": "qwen",
+      "route": "qwen",
+      "fallback": false,
+      "reason": null,
+      "model_calls": [
+        {
+          "provider": "qwen",
+          "model": "qwen-3.8-27b",
+          "latency_ms": 269,
+          "usage": {
+            "total_tokens": 450,
+            "completion_tokens": 18,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "prompt_tokens": 432,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "image_tokens": 0
+            }
+          },
+          "success": true
+        }
+      ],
+      "latency_ms": 269,
+      "jev_latency_ms": 0,
+      "fallback_latency_ms": 269,
+      "jev_usage": {},
+      "fallback_usage": {
+        "total_tokens": 450,
+        "completion_tokens": 18,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 432,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "image_tokens": 0
+        }
+      }
+    },
+    "seconds": 0.2692869580059778,
+    "tcp_connects": 1,
+    "http_version": "HTTP/2"
+  },
+  {
+    "model": "jev",
+    "connection": "pooled",
+    "trial": 1,
+    "warmup": false,
+    "success": true,
+    "routing": {
+      "policy": "jev",
+      "route": "jev",
+      "fallback": false,
+      "reason": null,
+      "model_calls": [
+        {
+          "provider": "jev",
+          "model": "typesafe/jev-1.13-20260917",
+          "latency_ms": 197,
+          "usage": {
+            "input_tokens": 1033,
+            "output_tokens": 62,
+            "cost": 4.3386e-05
+          },
+          "success": true
+        }
+      ],
+      "latency_ms": 197,
+      "jev_latency_ms": 197,
+      "fallback_latency_ms": 0,
+      "jev_usage": {
+        "input_tokens": 1033,
+        "output_tokens": 62,
+        "cost": 4.3386e-05
+      },
+      "fallback_usage": {}
+    },
+    "seconds": 0.19660029199440032,
+    "tcp_connects": 0,
+    "http_version": "HTTP/2"
+  },
+  {
+    "model": "jev",
+    "connection": "fresh",
+    "trial": 1,
+    "warmup": false,
+    "success": true,
+    "routing": {
+      "policy": "jev",
+      "route": "jev",
+      "fallback": false,
+      "reason": null,
+      "model_calls": [
+        {
+          "provider": "jev",
+          "model": "typesafe/jev-1.13-20260917",
+          "latency_ms": 265,
+          "usage": {
+            "input_tokens": 1033,
+            "output_tokens": 62,
+            "cost": 4.3386e-05
+          },
+          "success": true
+        }
+      ],
+      "latency_ms": 265,
+      "jev_latency_ms": 265,
+      "fallback_latency_ms": 0,
+      "jev_usage": {
+        "input_tokens": 1033,
+        "output_tokens": 62,
+        "cost": 4.3386e-05
+      },
+      "fallback_usage": {}
+    },
+    "seconds": 0.26548554199689534,
+    "tcp_connects": 1,
+    "http_version": "HTTP/2"
+  },
+  {
+    "model": "jev",
+    "connection": "fresh",
+    "trial": 2,
+    "warmup": false,
+    "success": true,
+    "routing": {
+      "policy": "jev",
+      "route": "jev",
+      "fallback": false,
+      "reason": null,
+      "model_calls": [
+        {
+          "provider": "jev",
+          "model": "typesafe/jev-1.13-20260917",
+          "latency_ms": 1072,
+          "usage": {
+            "input_tokens": 1033,
+            "output_tokens": 62,
+            "cost": 4.3386e-05
+          },
+          "success": true
+        }
+      ],
+      "latency_ms": 1072,
+      "jev_latency_ms": 1072,
+      "fallback_latency_ms": 0,
+      "jev_usage": {
+        "input_tokens": 1033,
+        "output_tokens": 62,
+        "cost": 4.3386e-05
+      },
+      "fallback_usage": {}
+    },
+    "seconds": 1.0720152080029948,
+    "tcp_connects": 1,
+    "http_version": "HTTP/2"
+  },
+  {
+    "model": "jev",
+    "connection": "pooled",
+    "trial": 2,
+    "warmup": false,
+    "success": true,
+    "routing": {
+      "policy": "jev",
+      "route": "jev",
+      "fallback": false,
+      "reason": null,
+      "model_calls": [
+        {
+          "provider": "jev",
+          "model": "typesafe/jev-1.13-20260917",
+          "latency_ms": 832,
+          "usage": {
+            "input_tokens": 1033,
+            "output_tokens": 62,
+            "cost": 4.3386e-05
+          },
+          "success": true
+        }
+      ],
+      "latency_ms": 832,
+      "jev_latency_ms": 832,
+      "fallback_latency_ms": 0,
+      "jev_usage": {
+        "input_tokens": 1033,
+        "output_tokens": 62,
+        "cost": 4.3386e-05
+      },
+      "fallback_usage": {}
+    },
+    "seconds": 0.8316373330017086,
+    "tcp_connects": 0,
+    "http_version": "HTTP/2"
+  },
+  {
+    "model": "qwen",
+    "connection": "fresh",
+    "trial": 2,
+    "warmup": false,
+    "success": true,
+    "routing": {
+      "policy": "qwen",
+      "route": "qwen",
+      "fallback": false,
+      "reason": null,
+      "model_calls": [
+        {
+          "provider": "qwen",
+          "model": "qwen-3.8-27b",
+          "latency_ms": 252,
+          "usage": {
+            "total_tokens": 450,
+            "completion_tokens": 18,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "prompt_tokens": 432,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "image_tokens": 0
+            }
+          },
+          "success": true
+        }
+      ],
+      "latency_ms": 252,
+      "jev_latency_ms": 0,
+      "fallback_latency_ms": 252,
+      "jev_usage": {},
+      "fallback_usage": {
+        "total_tokens": 450,
+        "completion_tokens": 18,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 432,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "image_tokens": 0
+        }
+      }
+    },
+    "seconds": 0.2522964999952819,
+    "tcp_connects": 1,
+    "http_version": "HTTP/2"
+  },
+  {
+    "model": "qwen",
+    "connection": "pooled",
+    "trial": 2,
+    "warmup": false,
+    "success": true,
+    "routing": {
+      "policy": "qwen",
+      "route": "qwen",
+      "fallback": false,
+      "reason": null,
+      "model_calls": [
+        {
+          "provider": "qwen",
+          "model": "qwen-3.8-27b",
+          "latency_ms": 214,
+          "usage": {
+            "total_tokens": 450,
+            "completion_tokens": 18,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "prompt_tokens": 432,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "image_tokens": 0
+            }
+          },
+          "success": true
+        }
+      ],
+      "latency_ms": 214,
+      "jev_latency_ms": 0,
+      "fallback_latency_ms": 214,
+      "jev_usage": {},
+      "fallback_usage": {
+        "total_tokens": 450,
+        "completion_tokens": 18,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 432,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "image_tokens": 0
+        }
+      }
+    },
+    "seconds": 0.21404187500593252,
+    "tcp_connects": 0,
+    "http_version": "HTTP/2"
+  },
+  {
+    "model": "qwen",
+    "connection": "pooled",
+    "trial": 3,
+    "warmup": false,
+    "success": true,
+    "routing": {
+      "policy": "qwen",
+      "route": "qwen",
+      "fallback": false,
+      "reason": null,
+      "model_calls": [
+        {
+          "provider": "qwen",
+          "model": "qwen-3.8-27b",
+          "latency_ms": 201,
+          "usage": {
+            "total_tokens": 450,
+            "completion_tokens": 18,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "prompt_tokens": 432,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "image_tokens": 0
+            }
+          },
+          "success": true
+        }
+      ],
+      "latency_ms": 201,
+      "jev_latency_ms": 0,
+      "fallback_latency_ms": 201,
+      "jev_usage": {},
+      "fallback_usage": {
+        "total_tokens": 450,
+        "completion_tokens": 18,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 432,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "image_tokens": 0
+        }
+      }
+    },
+    "seconds": 0.20075091600301675,
+    "tcp_connects": 0,
+    "http_version": "HTTP/2"
+  },
+  {
+    "model": "qwen",
+    "connection": "fresh",
+    "trial": 3,
+    "warmup": false,
+    "success": true,
+    "routing": {
+      "policy": "qwen",
+      "route": "qwen",
+      "fallback": false,
+      "reason": null,
+      "model_calls": [
+        {
+          "provider": "qwen",
+          "model": "qwen-3.8-27b",
+          "latency_ms": 251,
+          "usage": {
+            "total_tokens": 450,
+            "completion_tokens": 18,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "prompt_tokens": 432,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "image_tokens": 0
+            }
+          },
+          "success": true
+        }
+      ],
+      "latency_ms": 251,
+      "jev_latency_ms": 0,
+      "fallback_latency_ms": 251,
+      "jev_usage": {},
+      "fallback_usage": {
+        "total_tokens": 450,
+        "completion_tokens": 18,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 432,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "image_tokens": 0
+        }
+      }
+    },
+    "seconds": 0.25062575000629295,
+    "tcp_connects": 1,
+    "http_version": "HTTP/2"
+  },
+  {
+    "model": "jev",
+    "connection": "pooled",
+    "trial": 3,
+    "warmup": false,
+    "success": true,
+    "routing": {
+      "policy": "jev",
+      "route": "jev",
+      "fallback": false,
+      "reason": null,
+      "model_calls": [
+        {
+          "provider": "jev",
+          "model": "typesafe/jev-1.13-20260917",
+          "latency_ms": 168,
+          "usage": {
+            "input_tokens": 1033,
+            "output_tokens": 62,
+            "cost": 4.3386e-05
+          },
+          "success": true
+        }
+      ],
+      "latency_ms": 168,
+      "jev_latency_ms": 168,
+      "fallback_latency_ms": 0,
+      "jev_usage": {
+        "input_tokens": 1033,
+        "output_tokens": 62,
+        "cost": 4.3386e-05
+      },
+      "fallback_usage": {}
+    },
+    "seconds": 0.16775604199210647,
+    "tcp_connects": 0,
+    "http_version": "HTTP/2"
+  },
+  {
+    "model": "jev",
+    "connection": "fresh",
+    "trial": 3,
+    "warmup": false,
+    "success": true,
+    "routing": {
+      "policy": "jev",
+      "route": "jev",
+      "fallback": false,
+      "reason": null,
+      "model_calls": [
+        {
+          "provider": "jev",
+          "model": "typesafe/jev-1.13-20260917",
+          "latency_ms": 153,
+          "usage": {
+            "input_tokens": 1033,
+            "output_tokens": 62,
+            "cost": 4.3386e-05
+          },
+          "success": true
+        }
+      ],
+      "latency_ms": 153,
+      "jev_latency_ms": 153,
+      "fallback_latency_ms": 0,
+      "jev_usage": {
+        "input_tokens": 1033,
+        "output_tokens": 62,
+        "cost": 4.3386e-05
+      },
+      "fallback_usage": {}
+    },
+    "seconds": 0.15300970799580682,
+    "tcp_connects": 1,
+    "http_version": "HTTP/2"
+  },
+  {
+    "model": "jev",
+    "connection": "fresh",
+    "trial": 4,
+    "warmup": false,
+    "success": true,
+    "routing": {
+      "policy": "jev",
+      "route": "jev",
+      "fallback": false,
+      "reason": null,
+      "model_calls": [
+        {
+          "provider": "jev",
+          "model": "typesafe/jev-1.13-20260917",
+          "latency_ms": 440,
+          "usage": {
+            "input_tokens": 1033,
+            "output_tokens": 62,
+            "cost": 4.3386e-05
+          },
+          "success": true
+        }
+      ],
+      "latency_ms": 440,
+      "jev_latency_ms": 440,
+      "fallback_latency_ms": 0,
+      "jev_usage": {
+        "input_tokens": 1033,
+        "output_tokens": 62,
+        "cost": 4.3386e-05
+      },
+      "fallback_usage": {}
+    },
+    "seconds": 0.4400999170029536,
+    "tcp_connects": 1,
+    "http_version": "HTTP/2"
+  },
+  {
+    "model": "jev",
+    "connection": "pooled",
+    "trial": 4,
+    "warmup": false,
+    "success": true,
+    "routing": {
+      "policy": "jev",
+      "route": "jev",
+      "fallback": false,
+      "reason": null,
+      "model_calls": [
+        {
+          "provider": "jev",
+          "model": "typesafe/jev-1.13-20260917",
+          "latency_ms": 804,
+          "usage": {
+            "input_tokens": 1033,
+            "output_tokens": 62,
+            "cost": 4.3386e-05
+          },
+          "success": true
+        }
+      ],
+      "latency_ms": 804,
+      "jev_latency_ms": 804,
+      "fallback_latency_ms": 0,
+      "jev_usage": {
+        "input_tokens": 1033,
+        "output_tokens": 62,
+        "cost": 4.3386e-05
+      },
+      "fallback_usage": {}
+    },
+    "seconds": 0.8036995830043452,
+    "tcp_connects": 0,
+    "http_version": "HTTP/2"
+  },
+  {
+    "model": "qwen",
+    "connection": "fresh",
+    "trial": 4,
+    "warmup": false,
+    "success": true,
+    "routing": {
+      "policy": "qwen",
+      "route": "qwen",
+      "fallback": false,
+      "reason": null,
+      "model_calls": [
+        {
+          "provider": "qwen",
+          "model": "qwen-3.8-27b",
+          "latency_ms": 273,
+          "usage": {
+            "total_tokens": 450,
+            "completion_tokens": 18,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "prompt_tokens": 432,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "image_tokens": 0
+            }
+          },
+          "success": true
+        }
+      ],
+      "latency_ms": 273,
+      "jev_latency_ms": 0,
+      "fallback_latency_ms": 273,
+      "jev_usage": {},
+      "fallback_usage": {
+        "total_tokens": 450,
+        "completion_tokens": 18,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 432,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "image_tokens": 0
+        }
+      }
+    },
+    "seconds": 0.273104207997676,
+    "tcp_connects": 1,
+    "http_version": "HTTP/2"
+  },
+  {
+    "model": "qwen",
+    "connection": "pooled",
+    "trial": 4,
+    "warmup": false,
+    "success": true,
+    "routing": {
+      "policy": "qwen",
+      "route": "qwen",
+      "fallback": false,
+      "reason": null,
+      "model_calls": [
+        {
+          "provider": "qwen",
+          "model": "qwen-3.8-27b",
+          "latency_ms": 198,
+          "usage": {
+            "total_tokens": 446,
+            "completion_tokens": 14,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "prompt_tokens": 432,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "image_tokens": 0
+            }
+          },
+          "success": true
+        }
+      ],
+      "latency_ms": 198,
+      "jev_latency_ms": 0,
+      "fallback_latency_ms": 198,
+      "jev_usage": {},
+      "fallback_usage": {
+        "total_tokens": 446,
+        "completion_tokens": 14,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 432,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "image_tokens": 0
+        }
+      }
+    },
+    "seconds": 0.19853270900784992,
+    "tcp_connects": 0,
+    "http_version": "HTTP/2"
+  },
+  {
+    "model": "qwen",
+    "connection": "pooled",
+    "trial": 5,
+    "warmup": false,
+    "success": true,
+    "routing": {
+      "policy": "qwen",
+      "route": "qwen",
+      "fallback": false,
+      "reason": null,
+      "model_calls": [
+        {
+          "provider": "qwen",
+          "model": "qwen-3.8-27b",
+          "latency_ms": 205,
+          "usage": {
+            "total_tokens": 450,
+            "completion_tokens": 18,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "prompt_tokens": 432,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "image_tokens": 0
+            }
+          },
+          "success": true
+        }
+      ],
+      "latency_ms": 205,
+      "jev_latency_ms": 0,
+      "fallback_latency_ms": 205,
+      "jev_usage": {},
+      "fallback_usage": {
+        "total_tokens": 450,
+        "completion_tokens": 18,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 432,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "image_tokens": 0
+        }
+      }
+    },
+    "seconds": 0.20461149999755435,
+    "tcp_connects": 0,
+    "http_version": "HTTP/2"
+  },
+  {
+    "model": "qwen",
+    "connection": "fresh",
+    "trial": 5,
+    "warmup": false,
+    "success": true,
+    "routing": {
+      "policy": "qwen",
+      "route": "qwen",
+      "fallback": false,
+      "reason": null,
+      "model_calls": [
+        {
+          "provider": "qwen",
+          "model": "qwen-3.8-27b",
+          "latency_ms": 265,
+          "usage": {
+            "total_tokens": 450,
+            "completion_tokens": 18,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "prompt_tokens": 432,
+            "prompt_tokens_details": {
+              "cached_tokens": 0,
+              "image_tokens": 0
+            }
+          },
+          "success": true
+        }
+      ],
+      "latency_ms": 265,
+      "jev_latency_ms": 0,
+      "fallback_latency_ms": 265,
+      "jev_usage": {},
+      "fallback_usage": {
+        "total_tokens": 450,
+        "completion_tokens": 18,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 432,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "image_tokens": 0
+        }
+      }
+    },
+    "seconds": 0.26468720799311996,
+    "tcp_connects": 1,
+    "http_version": "HTTP/2"
+  },
+  {
+    "model": "jev",
+    "connection": "pooled",
+    "trial": 5,
+    "warmup": false,
+    "success": true,
+    "routing": {
+      "policy": "jev",
+      "route": "jev",
+      "fallback": false,
+      "reason": null,
+      "model_calls": [
+        {
+          "provider": "jev",
+          "model": "typesafe/jev-1.13-20260917",
+          "latency_ms": 115,
+          "usage": {
+            "input_tokens": 1033,
+            "output_tokens": 62,
+            "cost": 4.3386e-05
+          },
+          "success": true
+        }
+      ],
+      "latency_ms": 115,
+      "jev_latency_ms": 115,
+      "fallback_latency_ms": 0,
+      "jev_usage": {
+        "input_tokens": 1033,
+        "output_tokens": 62,
+        "cost": 4.3386e-05
+      },
+      "fallback_usage": {}
+    },
+    "seconds": 0.11482895899098366,
+    "tcp_connects": 0,
+    "http_version": "HTTP/2"
+  },
+  {
+    "model": "jev",
+    "connection": "fresh",
+    "trial": 5,
+    "warmup": false,
+    "success": true,
+    "routing": {
+      "policy": "jev",
+      "route": "jev",
+      "fallback": false,
+      "reason": null,
+      "model_calls": [
+        {
+          "provider": "jev",
+          "model": "typesafe/jev-1.13-20260917",
+          "latency_ms": 242,
+          "usage": {
+            "input_tokens": 1033,
+            "output_tokens": 62,
+            "cost": 4.3386e-05
+          },
+          "success": true
+        }
+      ],
+      "latency_ms": 242,
+      "jev_latency_ms": 242,
+      "fallback_latency_ms": 0,
+      "jev_usage": {
+        "input_tokens": 1033,
+        "output_tokens": 62,
+        "cost": 4.3386e-05
+      },
+      "fallback_usage": {}
+    },
+    "seconds": 0.24251024999830406,
+    "tcp_connects": 1,
+    "http_version": "HTTP/2"
+  }
+]

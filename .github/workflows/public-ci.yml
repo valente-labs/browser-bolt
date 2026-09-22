@@ -1,0 +1,46 @@
+name: Public BYOK checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: byok-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
+        with:
+          version: "0.11.16"
+          enable-cache: true
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22"
+      - name: Install locked test environment
+        run: uv sync --locked --extra mcp --python 3.12
+      - name: Test and lint without providers or browser access
+        run: |
+          uv run --frozen --extra mcp pytest
+          uv run --frozen ruff check jev_ultrafast tests local examples
+          node --check jev_ultrafast/static/app.js
+          node --check jev_ultrafast/snapshot.js
+      - name: Build and check installed wheel outside source
+        shell: bash
+        run: |
+          uv build
+          uv venv /tmp/bolt-wheel --python 3.12
+          uv pip install --python /tmp/bolt-wheel/bin/python --require-hashes -r requirements-mcp.txt
+          uv pip install --python /tmp/bolt-wheel/bin/python --no-deps dist/*.whl
+          uv pip check --python /tmp/bolt-wheel/bin/python
+          smoke=$(realpath local/wheel_smoke.py)
+          cd /tmp
+          /tmp/bolt-wheel/bin/python "$smoke"

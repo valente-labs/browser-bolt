@@ -31,7 +31,8 @@ def load_environment():
 
 def response_state():
     state = AGENT.snapshot() if AGENT else {"page": None, "status": "idle", "history": [], "decision": None}
-    return {**state, "text_model": os.environ.get("TEXT_MODEL", "deepseek-chat"), "max_steps": MAX_STEPS}
+    return {**state, "text_model": os.environ.get("TEXT_MODEL", "qwen-3.8-27b"),
+            "policy": os.environ.get("QWEV_POLICY", "hybrid"), "max_steps": MAX_STEPS}
 
 
 def close_browser():
@@ -132,7 +133,7 @@ def main():
     load_environment()
     atexit.register(close_browser)
     server = ThreadingHTTPServer(("127.0.0.1", PORT), Handler)
-    print(f"Jev Ultrafast: {ORIGIN}", flush=True)
+    print(f"Jev Qwerebras Ultrafast: {ORIGIN}", flush=True)
     try:
         server.serve_forever()
     except KeyboardInterrupt:

@@ -1,0 +1,115 @@
+name: Public static canary
+run-name: Browser Bolt canary ${{ inputs.launch_id || 'scheduled' }}
+
+on:
+  schedule:
+    - cron: '2-57/5 * * * *'
+  workflow_dispatch:
+    inputs:
+      repository:
+        description: Approved public repository
+        type: string
+        required: false
+      url:
+        description: Verified static HTTPS origin
+        type: string
+        required: false
+      release_id:
+        description: Verified static release digest
+        type: string
+        required: false
+      release_tag:
+        description: Approved package release tag
+        type: string
+        required: false
+      manifest_sha:
+        description: SHA256 of the approved public manifest bytes
+        type: string
+        required: false
+      expected_sha:
+        description: Approved source commit SHA
+        type: string
+        required: false
+      launch_id:
+        description: Correlation ID supplied by the verified publisher
+        type: string
+        required: false
+      drill:
+        description: 'Use failure only for an observed notification delivery drill'
+        type: choice
+        default: none
+        options:
+          - none
+          - failure
+
+permissions:
+  contents: read
+
+concurrency:
+  group: public-static-canary
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    if: github.event.repository.private == false && vars.BOLT_CANARY_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Bind reviewed monitoring identity
+        env:
+          INPUT_REPOSITORY: ${{ inputs.repository }}
+          INPUT_URL: ${{ inputs.url }}
+          INPUT_RELEASE_ID: ${{ inputs.release_id }}
+          INPUT_RELEASE_TAG: ${{ inputs.release_tag }}
+          INPUT_MANIFEST_SHA: ${{ inputs.manifest_sha }}
+          INPUT_EXPECTED_SHA: ${{ inputs.expected_sha }}
+          VAR_REPOSITORY: ${{ vars.BOLT_CANARY_REPOSITORY }}
+          VAR_URL: ${{ vars.BOLT_CANARY_URL }}
+          VAR_RELEASE_ID: ${{ vars.BOLT_CANARY_RELEASE }}
+          VAR_RELEASE_TAG: ${{ vars.BOLT_CANARY_TAG }}
+          VAR_MANIFEST_SHA: ${{ vars.BOLT_CANARY_MANIFEST_SHA }}
+        run: |
+          python3 - <<'PY'
+          import os, re, sys
+          from urllib.parse import urlsplit
+          
+          mode = os.environ.get("GITHUB_EVENT_NAME", "")
+          if mode not in {"workflow_dispatch", "schedule"}:
+              sys.exit("Invalid monitoring event")
+          prefix = "INPUT_" if mode == "workflow_dispatch" else "VAR_"
+          keys = ("REPOSITORY", "URL", "RELEASE_ID", "RELEASE_TAG", "MANIFEST_SHA")
+          values = {key: os.environ.get(prefix + key, "") for key in keys}
+          sha = os.environ.get("INPUT_EXPECTED_SHA" if mode == "workflow_dispatch" else "GITHUB_SHA", "")
+          try:
+              url = urlsplit(values["URL"])
+              valid = (
+                  values["REPOSITORY"] == os.environ.get("GITHUB_REPOSITORY", "")
+                  and bool(re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9-]*/[A-Za-z0-9_.-]+", values["REPOSITORY"]))
+                  and bool(re.fullmatch(r"[a-f0-9]{40}", sha))
+                  and sha == os.environ.get("GITHUB_SHA", "")
+                  and all(re.fullmatch(r"[a-f0-9]{64}", values[key]) for key in ("RELEASE_ID", "MANIFEST_SHA"))
+                  and bool(re.fullmatch(r"v\d+\.\d+\.\d+(?:-[A-Za-z0-9.-]+)?", values["RELEASE_TAG"]))
+                  and not any(character.isspace() or ord(character) < 32 for character in values["URL"])
+                  and url.scheme == "https" and bool(url.hostname)
+                  and url.username is None and url.password is None and url.port in {None, 443}
+                  and url.path in {"", "/"} and not url.query and not url.fragment
+              )
+          except ValueError:
+              valid = False
+          if not valid:
+              sys.exit("Invalid reviewed monitoring identity")
+          output = {"BOLT_CANARY_REPOSITORY": values["REPOSITORY"], "BOLT_CANARY_URL": values["URL"],
+                    "BOLT_CANARY_RELEASE": values["RELEASE_ID"], "BOLT_CANARY_TAG": values["RELEASE_TAG"],
+                    "BOLT_CANARY_MANIFEST_SHA": values["MANIFEST_SHA"], "BOLT_CHECKOUT_SHA": sha}
+          with open(os.environ["GITHUB_ENV"], "a") as destination:
+              for key, value in output.items():
+                  destination.write(key + "=" + value + "\n")
+          PY
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+          ref: ${{ env.BOLT_CHECKOUT_SHA }}
+      - name: Check the verified public release
+        env:
+          BOLT_CANARY_DRILL: ${{ inputs.drill || 'none' }}
+        run: timeout 100s python3 -m local.monitor canary --drill "$BOLT_CANARY_DRILL"

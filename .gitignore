@@ -8,3 +8,9 @@ artifacts/
 *.egg-info/
 
 dist/
+site/node_modules/
+site/test-results/
+.env.*
+!.env.example
+
+work/

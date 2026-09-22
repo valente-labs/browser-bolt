@@ -115,10 +115,18 @@ def test_click_cannot_consume_a_text_target(monkeypatch):
 
 def test_target_head_receives_control_state_and_full_next_step_rules(monkeypatch):
     p = page()
-    p["actions"].insert(0, {
-        "id": "toggle", "kind": "click", "label": "Free cancellation", "node": 30,
-        "role": "checkbox", "checked": "true", "selected": False,
-    })
+    p["actions"].insert(
+        0,
+        {
+            "id": "toggle",
+            "kind": "click",
+            "label": "Free cancellation",
+            "node": 30,
+            "role": "checkbox",
+            "checked": "true",
+            "selected": False,
+        },
+    )
 
     def post(_url, _key, body):
         questions = body["questions"]
@@ -261,9 +269,18 @@ def test_interrupted_dropdown_mutation_cannot_be_retried_as_stale(monkeypatch, r
     cdp = Mock(return_value=response)
     monkeypatch.setattr(browser, "cdp", cdp)
     with pytest.raises(RuntimeError, match="Dropdown execution"):
-        browser_operation({"operation": "act", "session": "test", "action": {
-            "id": "e1", "kind": "select", "node": 1, "value": "Design",
-        }})
+        browser_operation(
+            {
+                "operation": "act",
+                "session": "test",
+                "action": {
+                    "id": "e1",
+                    "kind": "select",
+                    "node": 1,
+                    "value": "Design",
+                },
+            }
+        )
     assert cdp.call_count == 1
 
 
@@ -318,3 +335,217 @@ def test_navigation_during_prediction_reobserves_without_action(runner):
     assert runner.state["status"] == "ready"
     assert runner.state["decision"] is None
     runner.state["browser"].act.assert_not_called()
+
+
+def test_fallback_inline_text_avoids_second_model_call(runner, monkeypatch):
+    helper = Mock(side_effect=AssertionError("Must reuse validated fallback text"))
+    monkeypatch.setattr(loop, "field_text", helper)
+    runner.state["decision"].update(inline_text="book", model="qwen-3.8-27b", confidence=None, probabilities={})
+    runner.command("act", {"fingerprint": runner.state["page"]["fingerprint"]})
+    helper.assert_not_called()
+    runner.state["browser"].act.assert_called_once_with(
+        runner.state["page"]["actions"][0], runner.state["page"], text="book"
+    )
+    assert runner.state["history"][0]["confidence"] is None
+    assert runner.state["history"][0]["probability"] is None
+    assert runner.state["text_calls"] == []  # Already billed/logged in the decision call.
+
+
+def test_fallback_inline_text_still_checks_freshness(runner, monkeypatch):
+    helper = Mock()
+    monkeypatch.setattr(loop, "field_text", helper)
+    runner.state["decision"].update(inline_text="book", model="qwen-3.8-27b")
+    runner.state["browser"].fresh.return_value = False
+    with pytest.raises(StalePage):
+        runner.command("act", {"fingerprint": runner.state["page"]["fingerprint"]})
+    helper.assert_not_called()
+    runner.state["browser"].act.assert_not_called()
+
+
+def test_mutation_failure_is_consumed_and_stops_run(runner, monkeypatch):
+    runner.state["decision"] = decision("e3")
+    runner.state["browser"].act.side_effect = RuntimeError("Mutation may have executed")
+    with pytest.raises(RuntimeError):
+        runner.command("act", {"fingerprint": runner.state["page"]["fingerprint"]})
+    assert runner.state["decision"] is None
+    assert runner.state["status"] == "blocked"
+    assert list(runner.run()) == []
+    runner.state["browser"].act.assert_called_once()
+
+
+def test_qwen_inline_text_not_cached_as_a_field_helper(runner, monkeypatch):
+    runner.state["decision"].update(inline_text="first", model="qwen")
+    runner.state["browser"].act.side_effect = [StalePage("Before any input"), None]
+    with pytest.raises(StalePage):
+        runner.command("act", {"fingerprint": runner.state["page"]["fingerprint"]})
+    assert runner.pending_text is None
+    helper = Mock(return_value=("second", {"model": "text", "latency_ms": 5, "usage": {}}))
+    monkeypatch.setattr(loop, "field_text", helper)
+    runner.state["decision"] = decision()
+    runner.command("act", {"fingerprint": runner.state["page"]["fingerprint"]})
+    helper.assert_called_once()
+    assert runner.state["browser"].act.call_args.kwargs["text"] == "second"
+
+
+def test_failed_decision_retains_call_telemetry(runner, monkeypatch):
+    error = ValueError("Invalid response")
+    error.routing = {"model_calls": [{"provider": "qwen", "success": False, "usage": {"total_tokens": 15}}]}
+    monkeypatch.setattr(loop, "choose", Mock(side_effect=error))
+    with pytest.raises(ValueError):
+        runner.command("predict")
+    assert runner.state["status"] == "blocked"
+    assert runner.state["decision"] is None
+    assert runner.state["decisions"][0]["routing"] == error.routing
+    runner.state["browser"].act.assert_not_called()
+
+
+def test_failed_field_retains_call_telemetry(runner, monkeypatch):
+    call = {"provider": "text", "success": False, "usage": {"total_tokens": 15}}
+    error = model.InvalidModelResponse("Invalid text", call)
+    monkeypatch.setattr(loop, "field_text", Mock(side_effect=error))
+    with pytest.raises(ValueError):
+        runner.command("act", {"fingerprint": runner.state["page"]["fingerprint"]})
+    assert runner.state["status"] == "blocked"
+    assert runner.state["text_calls"][0]["usage"] == {"total_tokens": 15}
+    runner.state["browser"].act.assert_not_called()
+
+
+def test_repeated_predecision_staleness_has_independent_budget(runner, monkeypatch):
+    runner.max_ticks = 3
+    runner.state["browser"].fresh.side_effect = StalePage("navigating")
+    runner.state["browser"].observe.side_effect = StalePage("still navigating")
+    provider = Mock()
+    monkeypatch.setattr(loop, "choose", provider)
+    snapshots = list(runner.run())
+    assert len(snapshots) == 4
+    assert snapshots[-1]["stop_reason"] == "tick_budget_exhausted"
+    assert runner.state["status"] == "blocked"
+    assert runner.state["decisions"] == runner.state["history"] == []
+    provider.assert_not_called()
+    runner.state["browser"].act.assert_not_called()
+
+
+def test_cancel_during_synchronous_provider_prevents_mutation(runner):
+    from concurrent.futures import ThreadPoolExecutor
+    from threading import Event
+
+    entered, release = Event(), Event()
+
+    def provider(*_args):
+        entered.set()
+        assert release.wait(2)
+        return decision("e3")
+
+    runner.decision_fn = provider
+    with ThreadPoolExecutor(max_workers=1) as pool:
+        future = pool.submit(runner.command, "tick")
+        try:
+            assert entered.wait(2)
+            runner.cancel()
+            runner.cancel()
+            assert not future.done()  # Cancellation does not claim to interrupt synchronous I/O.
+        finally:
+            release.set()
+        snapshot = future.result(timeout=2)
+    assert snapshot["stop_reason"] == "cancelled"
+    assert len(snapshot["decisions"]) == 1  # Retain the completed provider call for accounting.
+    runner.state["browser"].act.assert_not_called()
+
+
+@pytest.mark.parametrize("boundary", ["decision", "freshness", "text"])
+def test_deadline_prevents_next_provider_or_mutation(runner, monkeypatch, boundary):
+    now = [10.0]
+    runner._deadline = 11.0
+    monkeypatch.setattr(loop.time, "monotonic", lambda: now[0])
+    helper = Mock(return_value=("book", {"model": "test", "latency_ms": 1}))
+    runner.text_fn = helper
+
+    def expire(result):
+        now[0] = 12.0
+        return result
+
+    if boundary == "decision":
+        runner.decision_fn = lambda *_args: expire(decision())
+        snapshot = runner.command("tick")
+    elif boundary == "freshness":
+        runner.state["browser"].fresh.side_effect = lambda *_args: expire(True)
+        snapshot = runner.command("act", {"fingerprint": runner.state["page"]["fingerprint"]})
+    else:
+        helper.side_effect = lambda *_args: expire(("book", {"model": "test", "latency_ms": 1}))
+        snapshot = runner.command("act", {"fingerprint": runner.state["page"]["fingerprint"]})
+    assert snapshot["stop_reason"] == "deadline_exceeded"
+    assert helper.call_count == int(boundary == "text")
+    runner.state["browser"].act.assert_not_called()
+
+
+def test_cancellation_after_input_preserves_history_without_retry(runner):
+    runner.state["decision"] = decision("e3")
+    runner.state["browser"].act.side_effect = lambda *_args, **_kwargs: runner.cancel()
+    snapshot = runner.command("act", {"fingerprint": runner.state["page"]["fingerprint"]})
+    assert snapshot["stop_reason"] == "cancelled"
+    assert len(snapshot["history"]) == 1
+    assert snapshot["history"][0]["page_changed"] is None
+    assert list(runner.run()) == []
+    runner.command("tick")
+    runner.state["browser"].act.assert_called_once()
+    runner.state["browser"].observe.assert_not_called()
+
+
+@pytest.mark.parametrize("timeout", [0, -1, float("inf"), float("nan"), True, "120"])
+def test_invalid_timeout_rejected_before_browser_creation(monkeypatch, timeout):
+    browser = Mock()
+    monkeypatch.setattr(loop, "Browser", browser)
+    with pytest.raises(ValueError, match="timeout"):
+        loop.Agent("https://example.test", "Find a book", timeout=timeout)
+    browser.assert_not_called()
+
+
+@pytest.mark.parametrize("failure", ["observe", "mkdir", "write_bytes"])
+@pytest.mark.parametrize("cleanup_fails", [False, True])
+def test_constructor_cleanup_preserves_original_error(monkeypatch, tmp_path, failure, cleanup_fails):
+    from pathlib import Path
+
+    original = RuntimeError("original setup failure")
+    browser = Mock(observe=Mock(return_value={**page(), "screenshot": ""}))
+    if cleanup_fails:
+        browser.close.side_effect = RuntimeError("cleanup failed")
+    monkeypatch.setattr(loop, "Browser", Mock(return_value=browser))
+    if failure == "observe":
+        browser.observe.side_effect = original
+    else:
+        monkeypatch.setattr(Path, failure, Mock(side_effect=original))
+    with pytest.raises(RuntimeError) as caught:
+        loop.Agent("https://example.test", "Find a book", record_dir=tmp_path / "record")
+    assert caught.value is original
+    browser.close.assert_called_once()
+    if cleanup_fails:
+        assert "Agent cleanup failed: cleanup failed" in caught.value.__notes__
+
+
+def test_close_is_idempotent_and_signals_cancellation(monkeypatch):
+    browser = Mock(observe=Mock(return_value=page()))
+    monkeypatch.setattr(loop, "Browser", Mock(return_value=browser))
+    agent = loop.Agent("https://example.test", "Find a book")
+    agent.close()
+    agent.close()
+    browser.close.assert_called_once()
+    assert agent.command("tick")["stop_reason"] == "cancelled"
+
+
+def test_context_cleanup_does_not_mask_execution_error(monkeypatch):
+    browser = Mock(observe=Mock(return_value=page()), close=Mock(side_effect=RuntimeError("close failed")))
+    monkeypatch.setattr(loop, "Browser", Mock(return_value=browser))
+    original = RuntimeError("execution failed")
+    with pytest.raises(RuntimeError) as caught:
+        with loop.Agent("https://example.test", "Find a book") as agent:
+            raise original
+    assert caught.value is original
+    assert agent.cleanup_error == "close failed"
+    assert caught.value.__notes__ == ["Agent cleanup failed: close failed"]
+
+
+def test_terminal_stop_reason_survives_close_and_repeated_tick(runner):
+    runner._deadline = 0
+    assert runner.command("tick")["stop_reason"] == "deadline_exceeded"
+    runner.cancel()
+    assert runner.command("tick")["stop_reason"] == "deadline_exceeded"

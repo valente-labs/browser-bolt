@@ -1,0 +1,2699 @@
+{
+  "date": "2026-09-18",
+  "type": "integration smoke, not benchmark cohort",
+  "transport": "Codex Chrome adapter",
+  "source_sha256": {
+    "jev_ultrafast/comparators.py": "f14ef01d8ac2b6099aa380ac991437cdc10a478b5aa6ebf4070e86750a1755d7",
+    "local/comparison_probe.py": "418bcb9802fe4df3c5b08c55102cf90e90206c3431ebc3822613055e29fd70a5"
+  },
+  "runs": [
+    {
+      "arm": "qwen",
+      "task": "note",
+      "elapsed_ms": 1778.4276250000112,
+      "success": true,
+      "trace": [
+        {
+          "decision": {
+            "choice": "title",
+            "operation": "TYPE_TEXT",
+            "target": "1",
+            "confidence": null,
+            "probabilities": {},
+            "operation_probabilities": {},
+            "target_probabilities": {},
+            "target_confidence": null,
+            "raw_answers": {},
+            "inline_text": "Lisbon weekend",
+            "model": "qwen-3.8-27b",
+            "provider": "cerebras",
+            "usage": {
+              "total_tokens": 599,
+              "completion_tokens": 18,
+              "completion_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "prompt_tokens": 581,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "image_tokens": 0
+              }
+            },
+            "latency_ms": 620,
+            "routing": {
+              "policy": "qwen",
+              "profile": "qwen",
+              "route": "qwen",
+              "fallback": false,
+              "reason": null,
+              "model_calls": [
+                {
+                  "provider": "cerebras",
+                  "model": "qwen-3.8-27b",
+                  "role": "decision",
+                  "usage": {
+                    "total_tokens": 599,
+                    "completion_tokens": 18,
+                    "completion_tokens_details": {
+                      "reasoning_tokens": 0
+                    },
+                    "prompt_tokens": 581,
+                    "prompt_tokens_details": {
+                      "cached_tokens": 0,
+                      "image_tokens": 0
+                    }
+                  },
+                  "success": true,
+                  "http_status": 200,
+                  "latency_ms": 620
+                }
+              ],
+              "latency_ms": 620,
+              "jev_latency_ms": 0,
+              "fallback_latency_ms": 0,
+              "jev_usage": {},
+              "fallback_usage": {}
+            },
+            "jev_usage": {},
+            "fallback_usage": {}
+          },
+          "text": "Lisbon weekend"
+        },
+        {
+          "decision": {
+            "choice": "note",
+            "operation": "TYPE_TEXT",
+            "target": "2",
+            "confidence": null,
+            "probabilities": {},
+            "operation_probabilities": {},
+            "target_probabilities": {},
+            "target_confidence": null,
+            "raw_answers": {},
+            "inline_text": "Spend a relaxed weekend taking a scenic tram ride and enjoying fresh pastries.",
+            "model": "qwen-3.8-27b",
+            "provider": "cerebras",
+            "usage": {
+              "total_tokens": 642,
+              "completion_tokens": 30,
+              "completion_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "prompt_tokens": 612,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "image_tokens": 0
+              }
+            },
+            "latency_ms": 239,
+            "routing": {
+              "policy": "qwen",
+              "profile": "qwen",
+              "route": "qwen",
+              "fallback": false,
+              "reason": null,
+              "model_calls": [
+                {
+                  "provider": "cerebras",
+                  "model": "qwen-3.8-27b",
+                  "role": "decision",
+                  "usage": {
+                    "total_tokens": 642,
+                    "completion_tokens": 30,
+                    "completion_tokens_details": {
+                      "reasoning_tokens": 0
+                    },
+                    "prompt_tokens": 612,
+                    "prompt_tokens_details": {
+                      "cached_tokens": 0,
+                      "image_tokens": 0
+                    }
+                  },
+                  "success": true,
+                  "http_status": 200,
+                  "latency_ms": 238
+                }
+              ],
+              "latency_ms": 239,
+              "jev_latency_ms": 0,
+              "fallback_latency_ms": 0,
+              "jev_usage": {},
+              "fallback_usage": {}
+            },
+            "jev_usage": {},
+            "fallback_usage": {}
+          },
+          "text": "Spend a relaxed weekend taking a scenic tram ride and enjoying fresh pastries."
+        },
+        {
+          "decision": {
+            "choice": "save",
+            "operation": "CLICK",
+            "target": "3",
+            "confidence": null,
+            "probabilities": {},
+            "operation_probabilities": {},
+            "target_probabilities": {},
+            "target_confidence": null,
+            "raw_answers": {},
+            "model": "qwen-3.8-27b",
+            "provider": "cerebras",
+            "usage": {
+              "total_tokens": 680,
+              "completion_tokens": 14,
+              "completion_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "prompt_tokens": 666,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "image_tokens": 0
+              }
+            },
+            "latency_ms": 216,
+            "routing": {
+              "policy": "qwen",
+              "profile": "qwen",
+              "route": "qwen",
+              "fallback": false,
+              "reason": null,
+              "model_calls": [
+                {
+                  "provider": "cerebras",
+                  "model": "qwen-3.8-27b",
+                  "role": "decision",
+                  "usage": {
+                    "total_tokens": 680,
+                    "completion_tokens": 14,
+                    "completion_tokens_details": {
+                      "reasoning_tokens": 0
+                    },
+                    "prompt_tokens": 666,
+                    "prompt_tokens_details": {
+                      "cached_tokens": 0,
+                      "image_tokens": 0
+                    }
+                  },
+                  "success": true,
+                  "http_status": 200,
+                  "latency_ms": 216
+                }
+              ],
+              "latency_ms": 216,
+              "jev_latency_ms": 0,
+              "fallback_latency_ms": 0,
+              "jev_usage": {},
+              "fallback_usage": {}
+            },
+            "jev_usage": {},
+            "fallback_usage": {}
+          }
+        },
+        {
+          "decision": {
+            "choice": "DONE",
+            "operation": "DONE",
+            "target": null,
+            "confidence": null,
+            "probabilities": {},
+            "operation_probabilities": {},
+            "target_probabilities": {},
+            "target_confidence": null,
+            "raw_answers": {},
+            "model": "qwen-3.8-27b",
+            "provider": "cerebras",
+            "usage": {
+              "total_tokens": 570,
+              "completion_tokens": 18,
+              "completion_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "prompt_tokens": 552,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "image_tokens": 0
+              }
+            },
+            "latency_ms": 193,
+            "routing": {
+              "policy": "qwen",
+              "profile": "qwen",
+              "route": "qwen",
+              "fallback": false,
+              "reason": null,
+              "model_calls": [
+                {
+                  "provider": "cerebras",
+                  "model": "qwen-3.8-27b",
+                  "role": "decision",
+                  "usage": {
+                    "total_tokens": 570,
+                    "completion_tokens": 18,
+                    "completion_tokens_details": {
+                      "reasoning_tokens": 0
+                    },
+                    "prompt_tokens": 552,
+                    "prompt_tokens_details": {
+                      "cached_tokens": 0,
+                      "image_tokens": 0
+                    }
+                  },
+                  "success": true,
+                  "http_status": 200,
+                  "latency_ms": 193
+                }
+              ],
+              "latency_ms": 193,
+              "jev_latency_ms": 0,
+              "fallback_latency_ms": 0,
+              "jev_usage": {},
+              "fallback_usage": {}
+            },
+            "jev_usage": {},
+            "fallback_usage": {}
+          }
+        }
+      ],
+      "final": "- main:\n  - heading \"Note saved\" [level=1]\n  - paragraph: Lisbon weekend\n  - paragraph: Spend a relaxed weekend taking a scenic tram ride and enjoying fresh pastries.",
+      "content": {
+        "heading": "Note saved",
+        "paragraphs": [
+          "Lisbon weekend",
+          "Spend a relaxed weekend taking a scenic tram ride and enjoying fresh pastries."
+        ]
+      }
+    },
+    {
+      "arm": "jev_qwen",
+      "task": "note",
+      "elapsed_ms": 1655.8992500000168,
+      "success": true,
+      "trace": [
+        {
+          "decision": {
+            "choice": "title",
+            "operation": "TYPE_TEXT",
+            "target": "1",
+            "confidence": 0.99,
+            "probabilities": {
+              "title": 0.97,
+              "note": 0.03
+            },
+            "operation_probabilities": {
+              "BLOCKED": 0,
+              "DONE": 0,
+              "TYPE_TEXT": 1,
+              "CLICK": 0
+            },
+            "target_probabilities": {
+              "1": 0.97,
+              "2": 0.03
+            },
+            "target_confidence": 0.95,
+            "raw_answers": {
+              "operation": {
+                "type": "choice",
+                "choice": "TYPE_TEXT",
+                "probabilities": {
+                  "BLOCKED": 0,
+                  "DONE": 0,
+                  "TYPE_TEXT": 1,
+                  "CLICK": 0
+                },
+                "confidence": 0.99
+              },
+              "type_text_target": {
+                "type": "choice",
+                "choice": "1",
+                "probabilities": {
+                  "1": 0.97,
+                  "2": 0.03
+                },
+                "confidence": 0.95
+              },
+              "click_target": {
+                "type": "choice",
+                "choice": "3",
+                "probabilities": {
+                  "3": 1
+                },
+                "confidence": 1
+              }
+            },
+            "model": "typesafe/jev-1.13",
+            "provider": "openrouter",
+            "usage": {
+              "input_tokens": 1708,
+              "output_tokens": 101,
+              "cost": 7.1736e-05
+            },
+            "latency_ms": 313,
+            "routing": {
+              "policy": "jev_qwen",
+              "profile": "jev_qwen",
+              "route": "jev",
+              "fallback": false,
+              "reason": null,
+              "model_calls": [
+                {
+                  "provider": "openrouter",
+                  "model": "typesafe/jev-1.13",
+                  "role": "decision",
+                  "usage": {
+                    "input_tokens": 1708,
+                    "output_tokens": 101,
+                    "cost": 7.1736e-05
+                  },
+                  "success": true,
+                  "http_status": 200,
+                  "latency_ms": 313
+                }
+              ],
+              "latency_ms": 313,
+              "jev_latency_ms": 313,
+              "fallback_latency_ms": 0,
+              "jev_usage": {
+                "input_tokens": 1708,
+                "output_tokens": 101,
+                "cost": 7.1736e-05
+              },
+              "fallback_usage": {}
+            },
+            "jev_usage": {
+              "input_tokens": 1708,
+              "output_tokens": 101,
+              "cost": 7.1736e-05
+            },
+            "fallback_usage": {}
+          },
+          "text": "Lisbon weekend",
+          "text_meta": {
+            "provider": "cerebras",
+            "model": "qwen-3.8-27b",
+            "role": "field_text",
+            "usage": {
+              "total_tokens": 365,
+              "completion_tokens": 10,
+              "completion_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "prompt_tokens": 355,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "image_tokens": 0
+              }
+            },
+            "success": true,
+            "http_status": 200,
+            "latency_ms": 201
+          }
+        },
+        {
+          "decision": {
+            "choice": "note",
+            "operation": "TYPE_TEXT",
+            "target": "2",
+            "confidence": 1,
+            "probabilities": {
+              "title": 0,
+              "note": 1
+            },
+            "operation_probabilities": {
+              "CLICK": 0,
+              "DONE": 0,
+              "BLOCKED": 0,
+              "TYPE_TEXT": 1
+            },
+            "target_probabilities": {
+              "1": 0,
+              "2": 1
+            },
+            "target_confidence": 1,
+            "raw_answers": {
+              "operation": {
+                "type": "choice",
+                "choice": "TYPE_TEXT",
+                "probabilities": {
+                  "CLICK": 0,
+                  "DONE": 0,
+                  "BLOCKED": 0,
+                  "TYPE_TEXT": 1
+                },
+                "confidence": 1
+              },
+              "type_text_target": {
+                "type": "choice",
+                "choice": "2",
+                "probabilities": {
+                  "1": 0,
+                  "2": 1
+                },
+                "confidence": 1
+              },
+              "click_target": {
+                "type": "choice",
+                "choice": "3",
+                "probabilities": {
+                  "3": 1
+                },
+                "confidence": 1
+              }
+            },
+            "model": "typesafe/jev-1.13",
+            "provider": "openrouter",
+            "usage": {
+              "input_tokens": 1749,
+              "output_tokens": 101,
+              "cost": 7.3458e-05
+            },
+            "latency_ms": 124,
+            "routing": {
+              "policy": "jev_qwen",
+              "profile": "jev_qwen",
+              "route": "jev",
+              "fallback": false,
+              "reason": null,
+              "model_calls": [
+                {
+                  "provider": "openrouter",
+                  "model": "typesafe/jev-1.13",
+                  "role": "decision",
+                  "usage": {
+                    "input_tokens": 1749,
+                    "output_tokens": 101,
+                    "cost": 7.3458e-05
+                  },
+                  "success": true,
+                  "http_status": 200,
+                  "latency_ms": 124
+                }
+              ],
+              "latency_ms": 124,
+              "jev_latency_ms": 124,
+              "fallback_latency_ms": 0,
+              "jev_usage": {
+                "input_tokens": 1749,
+                "output_tokens": 101,
+                "cost": 7.3458e-05
+              },
+              "fallback_usage": {}
+            },
+            "jev_usage": {
+              "input_tokens": 1749,
+              "output_tokens": 101,
+              "cost": 7.3458e-05
+            },
+            "fallback_usage": {}
+          },
+          "text": "A relaxed weekend in Lisbon should include a leisurely tram ride and plenty of pastries.",
+          "text_meta": {
+            "provider": "cerebras",
+            "model": "qwen-3.8-27b",
+            "role": "field_text",
+            "usage": {
+              "total_tokens": 393,
+              "completion_tokens": 24,
+              "completion_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "prompt_tokens": 369,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "image_tokens": 0
+              }
+            },
+            "success": true,
+            "http_status": 200,
+            "latency_ms": 198
+          }
+        },
+        {
+          "decision": {
+            "choice": "save",
+            "operation": "CLICK",
+            "target": "3",
+            "confidence": 0.99,
+            "probabilities": {
+              "save": 1
+            },
+            "operation_probabilities": {
+              "BLOCKED": 0,
+              "DONE": 0,
+              "CLICK": 1,
+              "TYPE_TEXT": 0
+            },
+            "target_probabilities": {
+              "3": 1
+            },
+            "target_confidence": 1,
+            "raw_answers": {
+              "operation": {
+                "type": "choice",
+                "choice": "CLICK",
+                "probabilities": {
+                  "BLOCKED": 0,
+                  "DONE": 0,
+                  "CLICK": 1,
+                  "TYPE_TEXT": 0
+                },
+                "confidence": 0.99
+              },
+              "type_text_target": {
+                "type": "choice",
+                "choice": "2",
+                "probabilities": {
+                  "1": 0.41,
+                  "2": 0.59
+                },
+                "confidence": 0.17
+              },
+              "click_target": {
+                "type": "choice",
+                "choice": "3",
+                "probabilities": {
+                  "3": 1
+                },
+                "confidence": 1
+              }
+            },
+            "model": "typesafe/jev-1.13",
+            "provider": "openrouter",
+            "usage": {
+              "input_tokens": 1838,
+              "output_tokens": 100,
+              "cost": 7.7196e-05
+            },
+            "latency_ms": 159,
+            "routing": {
+              "policy": "jev_qwen",
+              "profile": "jev_qwen",
+              "route": "jev",
+              "fallback": false,
+              "reason": null,
+              "model_calls": [
+                {
+                  "provider": "openrouter",
+                  "model": "typesafe/jev-1.13",
+                  "role": "decision",
+                  "usage": {
+                    "input_tokens": 1838,
+                    "output_tokens": 100,
+                    "cost": 7.7196e-05
+                  },
+                  "success": true,
+                  "http_status": 200,
+                  "latency_ms": 159
+                }
+              ],
+              "latency_ms": 159,
+              "jev_latency_ms": 159,
+              "fallback_latency_ms": 0,
+              "jev_usage": {
+                "input_tokens": 1838,
+                "output_tokens": 100,
+                "cost": 7.7196e-05
+              },
+              "fallback_usage": {}
+            },
+            "jev_usage": {
+              "input_tokens": 1838,
+              "output_tokens": 100,
+              "cost": 7.7196e-05
+            },
+            "fallback_usage": {}
+          }
+        },
+        {
+          "decision": {
+            "choice": "DONE",
+            "operation": "DONE",
+            "target": null,
+            "confidence": 0.99,
+            "probabilities": {
+              "DONE": 0.99
+            },
+            "operation_probabilities": {
+              "DONE": 0.99,
+              "BLOCKED": 0.01
+            },
+            "target_probabilities": {},
+            "target_confidence": null,
+            "raw_answers": {
+              "operation": {
+                "type": "choice",
+                "choice": "DONE",
+                "probabilities": {
+                  "DONE": 0.99,
+                  "BLOCKED": 0.01
+                },
+                "confidence": 0.99
+              }
+            },
+            "model": "typesafe/jev-1.13",
+            "provider": "openrouter",
+            "usage": {
+              "input_tokens": 791,
+              "output_tokens": 33,
+              "cost": 3.3222e-05
+            },
+            "latency_ms": 116,
+            "routing": {
+              "policy": "jev_qwen",
+              "profile": "jev_qwen",
+              "route": "jev",
+              "fallback": false,
+              "reason": null,
+              "model_calls": [
+                {
+                  "provider": "openrouter",
+                  "model": "typesafe/jev-1.13",
+                  "role": "decision",
+                  "usage": {
+                    "input_tokens": 791,
+                    "output_tokens": 33,
+                    "cost": 3.3222e-05
+                  },
+                  "success": true,
+                  "http_status": 200,
+                  "latency_ms": 116
+                }
+              ],
+              "latency_ms": 116,
+              "jev_latency_ms": 116,
+              "fallback_latency_ms": 0,
+              "jev_usage": {
+                "input_tokens": 791,
+                "output_tokens": 33,
+                "cost": 3.3222e-05
+              },
+              "fallback_usage": {}
+            },
+            "jev_usage": {
+              "input_tokens": 791,
+              "output_tokens": 33,
+              "cost": 3.3222e-05
+            },
+            "fallback_usage": {}
+          }
+        }
+      ],
+      "final": "- main:\n  - heading \"Note saved\" [level=1]\n  - paragraph: Lisbon weekend\n  - paragraph: A relaxed weekend in Lisbon should include a leisurely tram ride and plenty of pastries.",
+      "content": {
+        "heading": "Note saved",
+        "paragraphs": [
+          "Lisbon weekend",
+          "A relaxed weekend in Lisbon should include a leisurely tram ride and plenty of pastries."
+        ]
+      }
+    },
+    {
+      "arm": "astra",
+      "task": "note",
+      "elapsed_ms": 8653.757416000008,
+      "success": true,
+      "trace": [
+        {
+          "decision": {
+            "choice": "title",
+            "operation": "TYPE_TEXT",
+            "target": "1",
+            "confidence": null,
+            "probabilities": {},
+            "operation_probabilities": {},
+            "target_probabilities": {},
+            "target_confidence": null,
+            "raw_answers": {},
+            "inline_text": "Lisbon weekend",
+            "model": "openai/gpt-6-astra",
+            "provider": "openrouter",
+            "usage": {
+              "prompt_tokens": 443,
+              "completion_tokens": 25,
+              "total_tokens": 468,
+              "cost": 0.00568,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00568,
+                "upstream_inference_prompt_cost": 0.00443,
+                "upstream_inference_completions_cost": 0.00125
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "latency_ms": 2310,
+            "routing": {
+              "policy": "astra",
+              "profile": "astra",
+              "route": "astra",
+              "fallback": false,
+              "reason": null,
+              "model_calls": [
+                {
+                  "provider": "openrouter",
+                  "model": "openai/gpt-6-astra",
+                  "role": "decision",
+                  "usage": {
+                    "prompt_tokens": 443,
+                    "completion_tokens": 25,
+                    "total_tokens": 468,
+                    "cost": 0.00568,
+                    "prompt_tokens_details": {
+                      "cached_tokens": 0,
+                      "cache_write_tokens": 0,
+                      "audio_tokens": 0,
+                      "video_tokens": 0
+                    },
+                    "cost_details": {
+                      "upstream_inference_cost": 0.00568,
+                      "upstream_inference_prompt_cost": 0.00443,
+                      "upstream_inference_completions_cost": 0.00125
+                    },
+                    "completion_tokens_details": {
+                      "reasoning_tokens": 0,
+                      "image_tokens": 0,
+                      "audio_tokens": 0
+                    }
+                  },
+                  "success": true,
+                  "http_status": 200,
+                  "latency_ms": 2310
+                }
+              ],
+              "latency_ms": 2310,
+              "jev_latency_ms": 0,
+              "fallback_latency_ms": 0,
+              "jev_usage": {},
+              "fallback_usage": {}
+            },
+            "jev_usage": {},
+            "fallback_usage": {}
+          },
+          "text": "Lisbon weekend"
+        },
+        {
+          "decision": {
+            "choice": "note",
+            "operation": "TYPE_TEXT",
+            "target": "2",
+            "confidence": null,
+            "probabilities": {},
+            "operation_probabilities": {},
+            "target_probabilities": {},
+            "target_confidence": null,
+            "raw_answers": {},
+            "inline_text": "Enjoy a relaxed weekend in Lisbon with a tram ride and delicious pastries.",
+            "model": "openai/gpt-6-astra",
+            "provider": "openrouter",
+            "usage": {
+              "prompt_tokens": 472,
+              "completion_tokens": 36,
+              "total_tokens": 508,
+              "cost": 0.00652,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00652,
+                "upstream_inference_prompt_cost": 0.00472,
+                "upstream_inference_completions_cost": 0.0018
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "latency_ms": 2055,
+            "routing": {
+              "policy": "astra",
+              "profile": "astra",
+              "route": "astra",
+              "fallback": false,
+              "reason": null,
+              "model_calls": [
+                {
+                  "provider": "openrouter",
+                  "model": "openai/gpt-6-astra",
+                  "role": "decision",
+                  "usage": {
+                    "prompt_tokens": 472,
+                    "completion_tokens": 36,
+                    "total_tokens": 508,
+                    "cost": 0.00652,
+                    "prompt_tokens_details": {
+                      "cached_tokens": 0,
+                      "cache_write_tokens": 0,
+                      "audio_tokens": 0,
+                      "video_tokens": 0
+                    },
+                    "cost_details": {
+                      "upstream_inference_cost": 0.00652,
+                      "upstream_inference_prompt_cost": 0.00472,
+                      "upstream_inference_completions_cost": 0.0018
+                    },
+                    "completion_tokens_details": {
+                      "reasoning_tokens": 0,
+                      "image_tokens": 0,
+                      "audio_tokens": 0
+                    }
+                  },
+                  "success": true,
+                  "http_status": 200,
+                  "latency_ms": 2055
+                }
+              ],
+              "latency_ms": 2055,
+              "jev_latency_ms": 0,
+              "fallback_latency_ms": 0,
+              "jev_usage": {},
+              "fallback_usage": {}
+            },
+            "jev_usage": {},
+            "fallback_usage": {}
+          },
+          "text": "Enjoy a relaxed weekend in Lisbon with a tram ride and delicious pastries."
+        },
+        {
+          "decision": {
+            "choice": "save",
+            "operation": "CLICK",
+            "target": "3",
+            "confidence": null,
+            "probabilities": {},
+            "operation_probabilities": {},
+            "target_probabilities": {},
+            "target_confidence": null,
+            "raw_answers": {},
+            "model": "openai/gpt-6-astra",
+            "provider": "openrouter",
+            "usage": {
+              "prompt_tokens": 522,
+              "completion_tokens": 22,
+              "total_tokens": 544,
+              "cost": 0.00632,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00632,
+                "upstream_inference_prompt_cost": 0.00522,
+                "upstream_inference_completions_cost": 0.0011
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "latency_ms": 1952,
+            "routing": {
+              "policy": "astra",
+              "profile": "astra",
+              "route": "astra",
+              "fallback": false,
+              "reason": null,
+              "model_calls": [
+                {
+                  "provider": "openrouter",
+                  "model": "openai/gpt-6-astra",
+                  "role": "decision",
+                  "usage": {
+                    "prompt_tokens": 522,
+                    "completion_tokens": 22,
+                    "total_tokens": 544,
+                    "cost": 0.00632,
+                    "prompt_tokens_details": {
+                      "cached_tokens": 0,
+                      "cache_write_tokens": 0,
+                      "audio_tokens": 0,
+                      "video_tokens": 0
+                    },
+                    "cost_details": {
+                      "upstream_inference_cost": 0.00632,
+                      "upstream_inference_prompt_cost": 0.00522,
+                      "upstream_inference_completions_cost": 0.0011
+                    },
+                    "completion_tokens_details": {
+                      "reasoning_tokens": 0,
+                      "image_tokens": 0,
+                      "audio_tokens": 0
+                    }
+                  },
+                  "success": true,
+                  "http_status": 200,
+                  "latency_ms": 1952
+                }
+              ],
+              "latency_ms": 1952,
+              "jev_latency_ms": 0,
+              "fallback_latency_ms": 0,
+              "jev_usage": {},
+              "fallback_usage": {}
+            },
+            "jev_usage": {},
+            "fallback_usage": {}
+          }
+        },
+        {
+          "decision": {
+            "choice": "DONE",
+            "operation": "DONE",
+            "target": null,
+            "confidence": null,
+            "probabilities": {},
+            "operation_probabilities": {},
+            "target_probabilities": {},
+            "target_confidence": null,
+            "raw_answers": {},
+            "model": "openai/gpt-6-astra",
+            "provider": "openrouter",
+            "usage": {
+              "prompt_tokens": 413,
+              "completion_tokens": 22,
+              "total_tokens": 435,
+              "cost": 0.00523,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00523,
+                "upstream_inference_prompt_cost": 0.00413,
+                "upstream_inference_completions_cost": 0.0011
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "latency_ms": 1807,
+            "routing": {
+              "policy": "astra",
+              "profile": "astra",
+              "route": "astra",
+              "fallback": false,
+              "reason": null,
+              "model_calls": [
+                {
+                  "provider": "openrouter",
+                  "model": "openai/gpt-6-astra",
+                  "role": "decision",
+                  "usage": {
+                    "prompt_tokens": 413,
+                    "completion_tokens": 22,
+                    "total_tokens": 435,
+                    "cost": 0.00523,
+                    "prompt_tokens_details": {
+                      "cached_tokens": 0,
+                      "cache_write_tokens": 0,
+                      "audio_tokens": 0,
+                      "video_tokens": 0
+                    },
+                    "cost_details": {
+                      "upstream_inference_cost": 0.00523,
+                      "upstream_inference_prompt_cost": 0.00413,
+                      "upstream_inference_completions_cost": 0.0011
+                    },
+                    "completion_tokens_details": {
+                      "reasoning_tokens": 0,
+                      "image_tokens": 0,
+                      "audio_tokens": 0
+                    }
+                  },
+                  "success": true,
+                  "http_status": 200,
+                  "latency_ms": 1806
+                }
+              ],
+              "latency_ms": 1807,
+              "jev_latency_ms": 0,
+              "fallback_latency_ms": 0,
+              "jev_usage": {},
+              "fallback_usage": {}
+            },
+            "jev_usage": {},
+            "fallback_usage": {}
+          }
+        }
+      ],
+      "final": "- main:\n  - heading \"Note saved\" [level=1]\n  - paragraph: Lisbon weekend\n  - paragraph: Enjoy a relaxed weekend in Lisbon with a tram ride and delicious pastries.",
+      "content": {
+        "heading": "Note saved",
+        "paragraphs": [
+          "Lisbon weekend",
+          "Enjoy a relaxed weekend in Lisbon with a tram ride and delicious pastries."
+        ]
+      }
+    },
+    {
+      "arm": "jev_astra",
+      "task": "note",
+      "elapsed_ms": 5357.876750000054,
+      "success": true,
+      "trace": [
+        {
+          "decision": {
+            "choice": "title",
+            "operation": "TYPE_TEXT",
+            "target": "1",
+            "confidence": 0.99,
+            "probabilities": {
+              "title": 0.97,
+              "note": 0.03
+            },
+            "operation_probabilities": {
+              "TYPE_TEXT": 1,
+              "BLOCKED": 0,
+              "CLICK": 0,
+              "DONE": 0
+            },
+            "target_probabilities": {
+              "1": 0.97,
+              "2": 0.03
+            },
+            "target_confidence": 0.93,
+            "raw_answers": {
+              "operation": {
+                "type": "choice",
+                "choice": "TYPE_TEXT",
+                "probabilities": {
+                  "TYPE_TEXT": 1,
+                  "BLOCKED": 0,
+                  "CLICK": 0,
+                  "DONE": 0
+                },
+                "confidence": 0.99
+              },
+              "type_text_target": {
+                "type": "choice",
+                "choice": "1",
+                "probabilities": {
+                  "1": 0.97,
+                  "2": 0.03
+                },
+                "confidence": 0.93
+              },
+              "click_target": {
+                "type": "choice",
+                "choice": "3",
+                "probabilities": {
+                  "3": 1
+                },
+                "confidence": 1
+              }
+            },
+            "model": "typesafe/jev-1.13",
+            "provider": "openrouter",
+            "usage": {
+              "input_tokens": 1708,
+              "output_tokens": 101,
+              "cost": 7.1736e-05
+            },
+            "latency_ms": 348,
+            "routing": {
+              "policy": "jev_astra",
+              "profile": "jev_astra",
+              "route": "jev",
+              "fallback": false,
+              "reason": null,
+              "model_calls": [
+                {
+                  "provider": "openrouter",
+                  "model": "typesafe/jev-1.13",
+                  "role": "decision",
+                  "usage": {
+                    "input_tokens": 1708,
+                    "output_tokens": 101,
+                    "cost": 7.1736e-05
+                  },
+                  "success": true,
+                  "http_status": 200,
+                  "latency_ms": 348
+                }
+              ],
+              "latency_ms": 348,
+              "jev_latency_ms": 348,
+              "fallback_latency_ms": 0,
+              "jev_usage": {
+                "input_tokens": 1708,
+                "output_tokens": 101,
+                "cost": 7.1736e-05
+              },
+              "fallback_usage": {}
+            },
+            "jev_usage": {
+              "input_tokens": 1708,
+              "output_tokens": 101,
+              "cost": 7.1736e-05
+            },
+            "fallback_usage": {}
+          },
+          "text": "Lisbon weekend",
+          "text_meta": {
+            "provider": "openrouter",
+            "model": "openai/gpt-6-astra",
+            "role": "field_text",
+            "usage": {
+              "prompt_tokens": 242,
+              "completion_tokens": 15,
+              "total_tokens": 257,
+              "cost": 0.00317,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00317,
+                "upstream_inference_prompt_cost": 0.00242,
+                "upstream_inference_completions_cost": 0.00075
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "success": true,
+            "http_status": 200,
+            "latency_ms": 2059
+          }
+        },
+        {
+          "decision": {
+            "choice": "note",
+            "operation": "TYPE_TEXT",
+            "target": "2",
+            "confidence": 1,
+            "probabilities": {
+              "title": 0,
+              "note": 1
+            },
+            "operation_probabilities": {
+              "BLOCKED": 0,
+              "DONE": 0,
+              "CLICK": 0,
+              "TYPE_TEXT": 1
+            },
+            "target_probabilities": {
+              "1": 0,
+              "2": 1
+            },
+            "target_confidence": 1,
+            "raw_answers": {
+              "operation": {
+                "type": "choice",
+                "choice": "TYPE_TEXT",
+                "probabilities": {
+                  "BLOCKED": 0,
+                  "DONE": 0,
+                  "CLICK": 0,
+                  "TYPE_TEXT": 1
+                },
+                "confidence": 1
+              },
+              "type_text_target": {
+                "type": "choice",
+                "choice": "2",
+                "probabilities": {
+                  "1": 0,
+                  "2": 1
+                },
+                "confidence": 1
+              },
+              "click_target": {
+                "type": "choice",
+                "choice": "3",
+                "probabilities": {
+                  "3": 1
+                },
+                "confidence": 1
+              }
+            },
+            "model": "typesafe/jev-1.13",
+            "provider": "openrouter",
+            "usage": {
+              "input_tokens": 1749,
+              "output_tokens": 101,
+              "cost": 7.3458e-05
+            },
+            "latency_ms": 165,
+            "routing": {
+              "policy": "jev_astra",
+              "profile": "jev_astra",
+              "route": "jev",
+              "fallback": false,
+              "reason": null,
+              "model_calls": [
+                {
+                  "provider": "openrouter",
+                  "model": "typesafe/jev-1.13",
+                  "role": "decision",
+                  "usage": {
+                    "input_tokens": 1749,
+                    "output_tokens": 101,
+                    "cost": 7.3458e-05
+                  },
+                  "success": true,
+                  "http_status": 200,
+                  "latency_ms": 165
+                }
+              ],
+              "latency_ms": 165,
+              "jev_latency_ms": 165,
+              "fallback_latency_ms": 0,
+              "jev_usage": {
+                "input_tokens": 1749,
+                "output_tokens": 101,
+                "cost": 7.3458e-05
+              },
+              "fallback_usage": {}
+            },
+            "jev_usage": {
+              "input_tokens": 1749,
+              "output_tokens": 101,
+              "cost": 7.3458e-05
+            },
+            "fallback_usage": {}
+          },
+          "text": "Enjoy a relaxed weekend in Lisbon with a scenic tram ride and delicious pastries.",
+          "text_meta": {
+            "provider": "openrouter",
+            "model": "openai/gpt-6-astra",
+            "role": "field_text",
+            "usage": {
+              "prompt_tokens": 255,
+              "completion_tokens": 27,
+              "total_tokens": 282,
+              "cost": 0.0039,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.0039,
+                "upstream_inference_prompt_cost": 0.00255,
+                "upstream_inference_completions_cost": 0.00135
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "success": true,
+            "http_status": 200,
+            "latency_ms": 1981
+          }
+        },
+        {
+          "decision": {
+            "choice": "save",
+            "operation": "CLICK",
+            "target": "3",
+            "confidence": 0.99,
+            "probabilities": {
+              "save": 1
+            },
+            "operation_probabilities": {
+              "DONE": 0,
+              "TYPE_TEXT": 0,
+              "CLICK": 1,
+              "BLOCKED": 0
+            },
+            "target_probabilities": {
+              "3": 1
+            },
+            "target_confidence": 1,
+            "raw_answers": {
+              "operation": {
+                "type": "choice",
+                "choice": "CLICK",
+                "probabilities": {
+                  "DONE": 0,
+                  "TYPE_TEXT": 0,
+                  "CLICK": 1,
+                  "BLOCKED": 0
+                },
+                "confidence": 0.99
+              },
+              "type_text_target": {
+                "type": "choice",
+                "choice": "2",
+                "probabilities": {
+                  "1": 0.39,
+                  "2": 0.61
+                },
+                "confidence": 0.23
+              },
+              "click_target": {
+                "type": "choice",
+                "choice": "3",
+                "probabilities": {
+                  "3": 1
+                },
+                "confidence": 1
+              }
+            },
+            "model": "typesafe/jev-1.13",
+            "provider": "openrouter",
+            "usage": {
+              "input_tokens": 1829,
+              "output_tokens": 100,
+              "cost": 7.6818e-05
+            },
+            "latency_ms": 118,
+            "routing": {
+              "policy": "jev_astra",
+              "profile": "jev_astra",
+              "route": "jev",
+              "fallback": false,
+              "reason": null,
+              "model_calls": [
+                {
+                  "provider": "openrouter",
+                  "model": "typesafe/jev-1.13",
+                  "role": "decision",
+                  "usage": {
+                    "input_tokens": 1829,
+                    "output_tokens": 100,
+                    "cost": 7.6818e-05
+                  },
+                  "success": true,
+                  "http_status": 200,
+                  "latency_ms": 118
+                }
+              ],
+              "latency_ms": 118,
+              "jev_latency_ms": 118,
+              "fallback_latency_ms": 0,
+              "jev_usage": {
+                "input_tokens": 1829,
+                "output_tokens": 100,
+                "cost": 7.6818e-05
+              },
+              "fallback_usage": {}
+            },
+            "jev_usage": {
+              "input_tokens": 1829,
+              "output_tokens": 100,
+              "cost": 7.6818e-05
+            },
+            "fallback_usage": {}
+          }
+        },
+        {
+          "decision": {
+            "choice": "DONE",
+            "operation": "DONE",
+            "target": null,
+            "confidence": 0.99,
+            "probabilities": {
+              "DONE": 0.99
+            },
+            "operation_probabilities": {
+              "BLOCKED": 0.01,
+              "DONE": 0.99
+            },
+            "target_probabilities": {},
+            "target_confidence": null,
+            "raw_answers": {
+              "operation": {
+                "type": "choice",
+                "choice": "DONE",
+                "probabilities": {
+                  "BLOCKED": 0.01,
+                  "DONE": 0.99
+                },
+                "confidence": 0.99
+              }
+            },
+            "model": "typesafe/jev-1.13",
+            "provider": "openrouter",
+            "usage": {
+              "input_tokens": 785,
+              "output_tokens": 33,
+              "cost": 3.297e-05
+            },
+            "latency_ms": 132,
+            "routing": {
+              "policy": "jev_astra",
+              "profile": "jev_astra",
+              "route": "jev",
+              "fallback": false,
+              "reason": null,
+              "model_calls": [
+                {
+                  "provider": "openrouter",
+                  "model": "typesafe/jev-1.13",
+                  "role": "decision",
+                  "usage": {
+                    "input_tokens": 785,
+                    "output_tokens": 33,
+                    "cost": 3.297e-05
+                  },
+                  "success": true,
+                  "http_status": 200,
+                  "latency_ms": 132
+                }
+              ],
+              "latency_ms": 132,
+              "jev_latency_ms": 132,
+              "fallback_latency_ms": 0,
+              "jev_usage": {
+                "input_tokens": 785,
+                "output_tokens": 33,
+                "cost": 3.297e-05
+              },
+              "fallback_usage": {}
+            },
+            "jev_usage": {
+              "input_tokens": 785,
+              "output_tokens": 33,
+              "cost": 3.297e-05
+            },
+            "fallback_usage": {}
+          }
+        }
+      ],
+      "final": "- main:\n  - heading \"Note saved\" [level=1]\n  - paragraph: Lisbon weekend\n  - paragraph: Enjoy a relaxed weekend in Lisbon with a scenic tram ride and delicious pastries.",
+      "content": {
+        "heading": "Note saved",
+        "paragraphs": [
+          "Lisbon weekend",
+          "Enjoy a relaxed weekend in Lisbon with a scenic tram ride and delicious pastries."
+        ]
+      }
+    },
+    {
+      "arm": "opus",
+      "task": "note",
+      "elapsed_ms": 11683.689416999929,
+      "success": true,
+      "trace": [
+        {
+          "decision": {
+            "choice": "title",
+            "operation": "TYPE_TEXT",
+            "target": "1",
+            "confidence": null,
+            "probabilities": {},
+            "operation_probabilities": {},
+            "target_probabilities": {},
+            "target_confidence": null,
+            "raw_answers": {},
+            "inline_text": "Lisbon weekend",
+            "model": "anthropic/claude-opus-5",
+            "provider": "openrouter",
+            "usage": {
+              "prompt_tokens": 914,
+              "completion_tokens": 37,
+              "total_tokens": 951,
+              "cost": 0.005495,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.005495,
+                "upstream_inference_prompt_cost": 0.00457,
+                "upstream_inference_completions_cost": 0.000925
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "latency_ms": 2531,
+            "routing": {
+              "policy": "opus",
+              "profile": "opus",
+              "route": "opus",
+              "fallback": false,
+              "reason": null,
+              "model_calls": [
+                {
+                  "provider": "openrouter",
+                  "model": "anthropic/claude-opus-5",
+                  "role": "decision",
+                  "usage": {
+                    "prompt_tokens": 914,
+                    "completion_tokens": 37,
+                    "total_tokens": 951,
+                    "cost": 0.005495,
+                    "prompt_tokens_details": {
+                      "cached_tokens": 0,
+                      "cache_write_tokens": 0,
+                      "audio_tokens": 0,
+                      "video_tokens": 0
+                    },
+                    "cost_details": {
+                      "upstream_inference_cost": 0.005495,
+                      "upstream_inference_prompt_cost": 0.00457,
+                      "upstream_inference_completions_cost": 0.000925
+                    },
+                    "completion_tokens_details": {
+                      "reasoning_tokens": 0,
+                      "image_tokens": 0,
+                      "audio_tokens": 0
+                    }
+                  },
+                  "success": true,
+                  "http_status": 200,
+                  "latency_ms": 2530
+                }
+              ],
+              "latency_ms": 2531,
+              "jev_latency_ms": 0,
+              "fallback_latency_ms": 0,
+              "jev_usage": {},
+              "fallback_usage": {}
+            },
+            "jev_usage": {},
+            "fallback_usage": {}
+          },
+          "text": "Lisbon weekend"
+        },
+        {
+          "decision": {
+            "choice": "note",
+            "operation": "TYPE_TEXT",
+            "target": "2",
+            "confidence": null,
+            "probabilities": {},
+            "operation_probabilities": {},
+            "target_probabilities": {},
+            "target_confidence": null,
+            "raw_answers": {},
+            "inline_text": "Spend a relaxed weekend riding the vintage tram through Lisbon's hills and pausing for custard pastries along the way.",
+            "model": "anthropic/claude-opus-5",
+            "provider": "openrouter",
+            "usage": {
+              "prompt_tokens": 960,
+              "completion_tokens": 70,
+              "total_tokens": 1030,
+              "cost": 0.00655,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00655,
+                "upstream_inference_prompt_cost": 0.0048,
+                "upstream_inference_completions_cost": 0.00175
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "latency_ms": 3420,
+            "routing": {
+              "policy": "opus",
+              "profile": "opus",
+              "route": "opus",
+              "fallback": false,
+              "reason": null,
+              "model_calls": [
+                {
+                  "provider": "openrouter",
+                  "model": "anthropic/claude-opus-5",
+                  "role": "decision",
+                  "usage": {
+                    "prompt_tokens": 960,
+                    "completion_tokens": 70,
+                    "total_tokens": 1030,
+                    "cost": 0.00655,
+                    "prompt_tokens_details": {
+                      "cached_tokens": 0,
+                      "cache_write_tokens": 0,
+                      "audio_tokens": 0,
+                      "video_tokens": 0
+                    },
+                    "cost_details": {
+                      "upstream_inference_cost": 0.00655,
+                      "upstream_inference_prompt_cost": 0.0048,
+                      "upstream_inference_completions_cost": 0.00175
+                    },
+                    "completion_tokens_details": {
+                      "reasoning_tokens": 0,
+                      "image_tokens": 0,
+                      "audio_tokens": 0
+                    }
+                  },
+                  "success": true,
+                  "http_status": 200,
+                  "latency_ms": 3420
+                }
+              ],
+              "latency_ms": 3420,
+              "jev_latency_ms": 0,
+              "fallback_latency_ms": 0,
+              "jev_usage": {},
+              "fallback_usage": {}
+            },
+            "jev_usage": {},
+            "fallback_usage": {}
+          },
+          "text": "Spend a relaxed weekend riding the vintage tram through Lisbon's hills and pausing for custard pastries along the way."
+        },
+        {
+          "decision": {
+            "choice": "save",
+            "operation": "CLICK",
+            "target": "3",
+            "confidence": null,
+            "probabilities": {},
+            "operation_probabilities": {},
+            "target_probabilities": {},
+            "target_confidence": null,
+            "raw_answers": {},
+            "model": "anthropic/claude-opus-5",
+            "provider": "openrouter",
+            "usage": {
+              "prompt_tokens": 1074,
+              "completion_tokens": 23,
+              "total_tokens": 1097,
+              "cost": 0.005945,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.005945,
+                "upstream_inference_prompt_cost": 0.00537,
+                "upstream_inference_completions_cost": 0.000575
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "latency_ms": 2842,
+            "routing": {
+              "policy": "opus",
+              "profile": "opus",
+              "route": "opus",
+              "fallback": false,
+              "reason": null,
+              "model_calls": [
+                {
+                  "provider": "openrouter",
+                  "model": "anthropic/claude-opus-5",
+                  "role": "decision",
+                  "usage": {
+                    "prompt_tokens": 1074,
+                    "completion_tokens": 23,
+                    "total_tokens": 1097,
+                    "cost": 0.005945,
+                    "prompt_tokens_details": {
+                      "cached_tokens": 0,
+                      "cache_write_tokens": 0,
+                      "audio_tokens": 0,
+                      "video_tokens": 0
+                    },
+                    "cost_details": {
+                      "upstream_inference_cost": 0.005945,
+                      "upstream_inference_prompt_cost": 0.00537,
+                      "upstream_inference_completions_cost": 0.000575
+                    },
+                    "completion_tokens_details": {
+                      "reasoning_tokens": 0,
+                      "image_tokens": 0,
+                      "audio_tokens": 0
+                    }
+                  },
+                  "success": true,
+                  "http_status": 200,
+                  "latency_ms": 2842
+                }
+              ],
+              "latency_ms": 2842,
+              "jev_latency_ms": 0,
+              "fallback_latency_ms": 0,
+              "jev_usage": {},
+              "fallback_usage": {}
+            },
+            "jev_usage": {},
+            "fallback_usage": {}
+          }
+        },
+        {
+          "decision": {
+            "choice": "DONE",
+            "operation": "DONE",
+            "target": null,
+            "confidence": null,
+            "probabilities": {},
+            "operation_probabilities": {},
+            "target_probabilities": {},
+            "target_confidence": null,
+            "raw_answers": {},
+            "model": "anthropic/claude-opus-5",
+            "provider": "openrouter",
+            "usage": {
+              "prompt_tokens": 891,
+              "completion_tokens": 24,
+              "total_tokens": 915,
+              "cost": 0.005055,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.005055,
+                "upstream_inference_prompt_cost": 0.004455,
+                "upstream_inference_completions_cost": 0.0006
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "latency_ms": 2386,
+            "routing": {
+              "policy": "opus",
+              "profile": "opus",
+              "route": "opus",
+              "fallback": false,
+              "reason": null,
+              "model_calls": [
+                {
+                  "provider": "openrouter",
+                  "model": "anthropic/claude-opus-5",
+                  "role": "decision",
+                  "usage": {
+                    "prompt_tokens": 891,
+                    "completion_tokens": 24,
+                    "total_tokens": 915,
+                    "cost": 0.005055,
+                    "prompt_tokens_details": {
+                      "cached_tokens": 0,
+                      "cache_write_tokens": 0,
+                      "audio_tokens": 0,
+                      "video_tokens": 0
+                    },
+                    "cost_details": {
+                      "upstream_inference_cost": 0.005055,
+                      "upstream_inference_prompt_cost": 0.004455,
+                      "upstream_inference_completions_cost": 0.0006
+                    },
+                    "completion_tokens_details": {
+                      "reasoning_tokens": 0,
+                      "image_tokens": 0,
+                      "audio_tokens": 0
+                    }
+                  },
+                  "success": true,
+                  "http_status": 200,
+                  "latency_ms": 2386
+                }
+              ],
+              "latency_ms": 2386,
+              "jev_latency_ms": 0,
+              "fallback_latency_ms": 0,
+              "jev_usage": {},
+              "fallback_usage": {}
+            },
+            "jev_usage": {},
+            "fallback_usage": {}
+          }
+        }
+      ],
+      "final": "- main:\n  - heading \"Note saved\" [level=1]\n  - paragraph: Lisbon weekend\n  - paragraph: Spend a relaxed weekend riding the vintage tram through Lisbon's hills and pausing for custard pastries along the way.",
+      "content": {
+        "heading": "Note saved",
+        "paragraphs": [
+          "Lisbon weekend",
+          "Spend a relaxed weekend riding the vintage tram through Lisbon's hills and pausing for custard pastries along the way."
+        ]
+      }
+    },
+    {
+      "arm": "jev_opus",
+      "task": "note",
+      "elapsed_ms": 6598.452874999959,
+      "success": true,
+      "trace": [
+        {
+          "decision": {
+            "choice": "title",
+            "operation": "TYPE_TEXT",
+            "target": "1",
+            "confidence": 0.99,
+            "probabilities": {
+              "title": 0.98,
+              "note": 0.02
+            },
+            "operation_probabilities": {
+              "DONE": 0,
+              "CLICK": 0,
+              "TYPE_TEXT": 0.99,
+              "BLOCKED": 0.01
+            },
+            "target_probabilities": {
+              "1": 0.98,
+              "2": 0.02
+            },
+            "target_confidence": 0.97,
+            "raw_answers": {
+              "operation": {
+                "type": "choice",
+                "choice": "TYPE_TEXT",
+                "probabilities": {
+                  "DONE": 0,
+                  "CLICK": 0,
+                  "TYPE_TEXT": 0.99,
+                  "BLOCKED": 0.01
+                },
+                "confidence": 0.99
+              },
+              "type_text_target": {
+                "type": "choice",
+                "choice": "1",
+                "probabilities": {
+                  "1": 0.98,
+                  "2": 0.02
+                },
+                "confidence": 0.97
+              },
+              "click_target": {
+                "type": "choice",
+                "choice": "3",
+                "probabilities": {
+                  "3": 1
+                },
+                "confidence": 1
+              }
+            },
+            "model": "typesafe/jev-1.13",
+            "provider": "openrouter",
+            "usage": {
+              "input_tokens": 1708,
+              "output_tokens": 101,
+              "cost": 7.1736e-05
+            },
+            "latency_ms": 120,
+            "routing": {
+              "policy": "jev_opus",
+              "profile": "jev_opus",
+              "route": "jev",
+              "fallback": false,
+              "reason": null,
+              "model_calls": [
+                {
+                  "provider": "openrouter",
+                  "model": "typesafe/jev-1.13",
+                  "role": "decision",
+                  "usage": {
+                    "input_tokens": 1708,
+                    "output_tokens": 101,
+                    "cost": 7.1736e-05
+                  },
+                  "success": true,
+                  "http_status": 200,
+                  "latency_ms": 120
+                }
+              ],
+              "latency_ms": 120,
+              "jev_latency_ms": 120,
+              "fallback_latency_ms": 0,
+              "jev_usage": {
+                "input_tokens": 1708,
+                "output_tokens": 101,
+                "cost": 7.1736e-05
+              },
+              "fallback_usage": {}
+            },
+            "jev_usage": {
+              "input_tokens": 1708,
+              "output_tokens": 101,
+              "cost": 7.1736e-05
+            },
+            "fallback_usage": {}
+          },
+          "text": "Lisbon weekend",
+          "text_meta": {
+            "provider": "openrouter",
+            "model": "anthropic/claude-opus-5",
+            "role": "field_text",
+            "usage": {
+              "prompt_tokens": 495,
+              "completion_tokens": 17,
+              "total_tokens": 512,
+              "cost": 0.0029,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.0029,
+                "upstream_inference_prompt_cost": 0.002475,
+                "upstream_inference_completions_cost": 0.000425
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "success": true,
+            "http_status": 200,
+            "latency_ms": 2488
+          }
+        },
+        {
+          "decision": {
+            "choice": "note",
+            "operation": "TYPE_TEXT",
+            "target": "2",
+            "confidence": 1,
+            "probabilities": {
+              "title": 0,
+              "note": 1
+            },
+            "operation_probabilities": {
+              "BLOCKED": 0,
+              "DONE": 0,
+              "TYPE_TEXT": 1,
+              "CLICK": 0
+            },
+            "target_probabilities": {
+              "1": 0,
+              "2": 1
+            },
+            "target_confidence": 1,
+            "raw_answers": {
+              "operation": {
+                "type": "choice",
+                "choice": "TYPE_TEXT",
+                "probabilities": {
+                  "BLOCKED": 0,
+                  "DONE": 0,
+                  "TYPE_TEXT": 1,
+                  "CLICK": 0
+                },
+                "confidence": 1
+              },
+              "type_text_target": {
+                "type": "choice",
+                "choice": "2",
+                "probabilities": {
+                  "1": 0,
+                  "2": 1
+                },
+                "confidence": 1
+              },
+              "click_target": {
+                "type": "choice",
+                "choice": "3",
+                "probabilities": {
+                  "3": 1
+                },
+                "confidence": 1
+              }
+            },
+            "model": "typesafe/jev-1.13",
+            "provider": "openrouter",
+            "usage": {
+              "input_tokens": 1749,
+              "output_tokens": 101,
+              "cost": 7.3458e-05
+            },
+            "latency_ms": 190,
+            "routing": {
+              "policy": "jev_opus",
+              "profile": "jev_opus",
+              "route": "jev",
+              "fallback": false,
+              "reason": null,
+              "model_calls": [
+                {
+                  "provider": "openrouter",
+                  "model": "typesafe/jev-1.13",
+                  "role": "decision",
+                  "usage": {
+                    "input_tokens": 1749,
+                    "output_tokens": 101,
+                    "cost": 7.3458e-05
+                  },
+                  "success": true,
+                  "http_status": 200,
+                  "latency_ms": 190
+                }
+              ],
+              "latency_ms": 190,
+              "jev_latency_ms": 190,
+              "fallback_latency_ms": 0,
+              "jev_usage": {
+                "input_tokens": 1749,
+                "output_tokens": 101,
+                "cost": 7.3458e-05
+              },
+              "fallback_usage": {}
+            },
+            "jev_usage": {
+              "input_tokens": 1749,
+              "output_tokens": 101,
+              "cost": 7.3458e-05
+            },
+            "fallback_usage": {}
+          },
+          "text": "Spend a relaxed weekend in Lisbon riding the vintage tram and sampling custard pastries.",
+          "text_meta": {
+            "provider": "openrouter",
+            "model": "anthropic/claude-opus-5",
+            "role": "field_text",
+            "usage": {
+              "prompt_tokens": 518,
+              "completion_tokens": 43,
+              "total_tokens": 561,
+              "cost": 0.003665,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.003665,
+                "upstream_inference_prompt_cost": 0.00259,
+                "upstream_inference_completions_cost": 0.001075
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "success": true,
+            "http_status": 200,
+            "latency_ms": 2987
+          }
+        },
+        {
+          "decision": {
+            "choice": "save",
+            "operation": "CLICK",
+            "target": "3",
+            "confidence": 0.99,
+            "probabilities": {
+              "save": 1
+            },
+            "operation_probabilities": {
+              "BLOCKED": 0,
+              "DONE": 0,
+              "CLICK": 1,
+              "TYPE_TEXT": 0
+            },
+            "target_probabilities": {
+              "3": 1
+            },
+            "target_confidence": 1,
+            "raw_answers": {
+              "operation": {
+                "type": "choice",
+                "choice": "CLICK",
+                "probabilities": {
+                  "BLOCKED": 0,
+                  "DONE": 0,
+                  "CLICK": 1,
+                  "TYPE_TEXT": 0
+                },
+                "confidence": 0.99
+              },
+              "type_text_target": {
+                "type": "choice",
+                "choice": "2",
+                "probabilities": {
+                  "1": 0.44,
+                  "2": 0.56
+                },
+                "confidence": 0.11
+              },
+              "click_target": {
+                "type": "choice",
+                "choice": "3",
+                "probabilities": {
+                  "3": 1
+                },
+                "confidence": 1
+              }
+            },
+            "model": "typesafe/jev-1.13",
+            "provider": "openrouter",
+            "usage": {
+              "input_tokens": 1835,
+              "output_tokens": 100,
+              "cost": 7.707e-05
+            },
+            "latency_ms": 151,
+            "routing": {
+              "policy": "jev_opus",
+              "profile": "jev_opus",
+              "route": "jev",
+              "fallback": false,
+              "reason": null,
+              "model_calls": [
+                {
+                  "provider": "openrouter",
+                  "model": "typesafe/jev-1.13",
+                  "role": "decision",
+                  "usage": {
+                    "input_tokens": 1835,
+                    "output_tokens": 100,
+                    "cost": 7.707e-05
+                  },
+                  "success": true,
+                  "http_status": 200,
+                  "latency_ms": 151
+                }
+              ],
+              "latency_ms": 151,
+              "jev_latency_ms": 151,
+              "fallback_latency_ms": 0,
+              "jev_usage": {
+                "input_tokens": 1835,
+                "output_tokens": 100,
+                "cost": 7.707e-05
+              },
+              "fallback_usage": {}
+            },
+            "jev_usage": {
+              "input_tokens": 1835,
+              "output_tokens": 100,
+              "cost": 7.707e-05
+            },
+            "fallback_usage": {}
+          }
+        },
+        {
+          "decision": {
+            "choice": "DONE",
+            "operation": "DONE",
+            "target": null,
+            "confidence": 0.98,
+            "probabilities": {
+              "DONE": 0.99
+            },
+            "operation_probabilities": {
+              "BLOCKED": 0.01,
+              "DONE": 0.99
+            },
+            "target_probabilities": {},
+            "target_confidence": null,
+            "raw_answers": {
+              "operation": {
+                "type": "choice",
+                "choice": "DONE",
+                "probabilities": {
+                  "BLOCKED": 0.01,
+                  "DONE": 0.99
+                },
+                "confidence": 0.98
+              }
+            },
+            "model": "typesafe/jev-1.13",
+            "provider": "openrouter",
+            "usage": {
+              "input_tokens": 789,
+              "output_tokens": 33,
+              "cost": 3.3138e-05
+            },
+            "latency_ms": 150,
+            "routing": {
+              "policy": "jev_opus",
+              "profile": "jev_opus",
+              "route": "jev",
+              "fallback": false,
+              "reason": null,
+              "model_calls": [
+                {
+                  "provider": "openrouter",
+                  "model": "typesafe/jev-1.13",
+                  "role": "decision",
+                  "usage": {
+                    "input_tokens": 789,
+                    "output_tokens": 33,
+                    "cost": 3.3138e-05
+                  },
+                  "success": true,
+                  "http_status": 200,
+                  "latency_ms": 150
+                }
+              ],
+              "latency_ms": 150,
+              "jev_latency_ms": 150,
+              "fallback_latency_ms": 0,
+              "jev_usage": {
+                "input_tokens": 789,
+                "output_tokens": 33,
+                "cost": 3.3138e-05
+              },
+              "fallback_usage": {}
+            },
+            "jev_usage": {
+              "input_tokens": 789,
+              "output_tokens": 33,
+              "cost": 3.3138e-05
+            },
+            "fallback_usage": {}
+          }
+        }
+      ],
+      "final": "- main:\n  - heading \"Note saved\" [level=1]\n  - paragraph: Lisbon weekend\n  - paragraph: Spend a relaxed weekend in Lisbon riding the vintage tram and sampling custard pastries.",
+      "content": {
+        "heading": "Note saved",
+        "paragraphs": [
+          "Lisbon weekend",
+          "Spend a relaxed weekend in Lisbon riding the vintage tram and sampling custard pastries."
+        ]
+      }
+    },
+    {
+      "arm": "jev",
+      "task": "choice",
+      "elapsed_ms": 1332.3333750000456,
+      "success": true,
+      "trace": [
+        {
+          "decision": {
+            "choice": "express",
+            "operation": "CLICK",
+            "target": "2",
+            "confidence": 0.93,
+            "probabilities": {
+              "standard": 0,
+              "express": 0.99,
+              "confirm": 0.01
+            },
+            "operation_probabilities": {
+              "CLICK": 0.96,
+              "BLOCKED": 0.04,
+              "DONE": 0
+            },
+            "target_probabilities": {
+              "1": 0,
+              "2": 0.99,
+              "3": 0.01
+            },
+            "target_confidence": 0.99,
+            "raw_answers": {
+              "operation": {
+                "type": "choice",
+                "choice": "CLICK",
+                "probabilities": {
+                  "CLICK": 0.96,
+                  "BLOCKED": 0.04,
+                  "DONE": 0
+                },
+                "confidence": 0.93
+              },
+              "click_target": {
+                "type": "choice",
+                "choice": "2",
+                "probabilities": {
+                  "1": 0,
+                  "2": 0.99,
+                  "3": 0.01
+                },
+                "confidence": 0.99
+              }
+            },
+            "model": "typesafe/jev-1.13",
+            "provider": "openrouter",
+            "usage": {
+              "input_tokens": 1279,
+              "output_tokens": 76,
+              "cost": 5.3718e-05
+            },
+            "latency_ms": 142,
+            "routing": {
+              "policy": "jev",
+              "profile": "jev",
+              "route": "jev",
+              "fallback": false,
+              "reason": null,
+              "model_calls": [
+                {
+                  "provider": "openrouter",
+                  "model": "typesafe/jev-1.13",
+                  "role": "decision",
+                  "usage": {
+                    "input_tokens": 1279,
+                    "output_tokens": 76,
+                    "cost": 5.3718e-05
+                  },
+                  "success": true,
+                  "http_status": 200,
+                  "latency_ms": 142
+                }
+              ],
+              "latency_ms": 142,
+              "jev_latency_ms": 142,
+              "fallback_latency_ms": 0,
+              "jev_usage": {
+                "input_tokens": 1279,
+                "output_tokens": 76,
+                "cost": 5.3718e-05
+              },
+              "fallback_usage": {}
+            },
+            "jev_usage": {
+              "input_tokens": 1279,
+              "output_tokens": 76,
+              "cost": 5.3718e-05
+            },
+            "fallback_usage": {}
+          }
+        },
+        {
+          "decision": {
+            "choice": "confirm",
+            "operation": "CLICK",
+            "target": "3",
+            "confidence": 0.97,
+            "probabilities": {
+              "standard": 0,
+              "express": 0,
+              "confirm": 1
+            },
+            "operation_probabilities": {
+              "DONE": 0.02,
+              "CLICK": 0.98,
+              "BLOCKED": 0
+            },
+            "target_probabilities": {
+              "1": 0,
+              "2": 0,
+              "3": 1
+            },
+            "target_confidence": 0.99,
+            "raw_answers": {
+              "operation": {
+                "type": "choice",
+                "choice": "CLICK",
+                "probabilities": {
+                  "DONE": 0.02,
+                  "CLICK": 0.98,
+                  "BLOCKED": 0
+                },
+                "confidence": 0.97
+              },
+              "click_target": {
+                "type": "choice",
+                "choice": "3",
+                "probabilities": {
+                  "1": 0,
+                  "2": 0,
+                  "3": 1
+                },
+                "confidence": 0.99
+              }
+            },
+            "model": "typesafe/jev-1.13",
+            "provider": "openrouter",
+            "usage": {
+              "input_tokens": 1310,
+              "output_tokens": 76,
+              "cost": 5.502e-05
+            },
+            "latency_ms": 196,
+            "routing": {
+              "policy": "jev",
+              "profile": "jev",
+              "route": "jev",
+              "fallback": false,
+              "reason": null,
+              "model_calls": [
+                {
+                  "provider": "openrouter",
+                  "model": "typesafe/jev-1.13",
+                  "role": "decision",
+                  "usage": {
+                    "input_tokens": 1310,
+                    "output_tokens": 76,
+                    "cost": 5.502e-05
+                  },
+                  "success": true,
+                  "http_status": 200,
+                  "latency_ms": 196
+                }
+              ],
+              "latency_ms": 196,
+              "jev_latency_ms": 196,
+              "fallback_latency_ms": 0,
+              "jev_usage": {
+                "input_tokens": 1310,
+                "output_tokens": 76,
+                "cost": 5.502e-05
+              },
+              "fallback_usage": {}
+            },
+            "jev_usage": {
+              "input_tokens": 1310,
+              "output_tokens": 76,
+              "cost": 5.502e-05
+            },
+            "fallback_usage": {}
+          }
+        },
+        {
+          "decision": {
+            "choice": "DONE",
+            "operation": "DONE",
+            "target": null,
+            "confidence": 0.99,
+            "probabilities": {
+              "DONE": 0.99
+            },
+            "operation_probabilities": {
+              "BLOCKED": 0.01,
+              "DONE": 0.99
+            },
+            "target_probabilities": {},
+            "target_confidence": null,
+            "raw_answers": {
+              "operation": {
+                "type": "choice",
+                "choice": "DONE",
+                "probabilities": {
+                  "BLOCKED": 0.01,
+                  "DONE": 0.99
+                },
+                "confidence": 0.99
+              }
+            },
+            "model": "typesafe/jev-1.13",
+            "provider": "openrouter",
+            "usage": {
+              "input_tokens": 699,
+              "output_tokens": 33,
+              "cost": 2.9358e-05
+            },
+            "latency_ms": 257,
+            "routing": {
+              "policy": "jev",
+              "profile": "jev",
+              "route": "jev",
+              "fallback": false,
+              "reason": null,
+              "model_calls": [
+                {
+                  "provider": "openrouter",
+                  "model": "typesafe/jev-1.13",
+                  "role": "decision",
+                  "usage": {
+                    "input_tokens": 699,
+                    "output_tokens": 33,
+                    "cost": 2.9358e-05
+                  },
+                  "success": true,
+                  "http_status": 200,
+                  "latency_ms": 257
+                }
+              ],
+              "latency_ms": 257,
+              "jev_latency_ms": 257,
+              "fallback_latency_ms": 0,
+              "jev_usage": {
+                "input_tokens": 699,
+                "output_tokens": 33,
+                "cost": 2.9358e-05
+              },
+              "fallback_usage": {}
+            },
+            "jev_usage": {
+              "input_tokens": 699,
+              "output_tokens": 33,
+              "cost": 2.9358e-05
+            },
+            "fallback_usage": {}
+          }
+        }
+      ],
+      "final": "- main:\n  - heading \"Preference saved\" [level=1]\n  - paragraph: Express",
+      "content": {
+        "heading": "Preference saved",
+        "paragraphs": [
+          "Express"
+        ]
+      }
+    },
+    {
+      "arm": "jev",
+      "task": "note",
+      "elapsed_ms": 211.12866599997506,
+      "success": false,
+      "trace": [
+        {
+          "decision": {
+            "choice": "title",
+            "operation": "TYPE_TEXT",
+            "target": "1",
+            "confidence": 0.99,
+            "probabilities": {
+              "title": 0.97,
+              "note": 0.03
+            },
+            "operation_probabilities": {
+              "TYPE_TEXT": 1,
+              "CLICK": 0,
+              "BLOCKED": 0,
+              "DONE": 0
+            },
+            "target_probabilities": {
+              "1": 0.97,
+              "2": 0.03
+            },
+            "target_confidence": 0.94,
+            "raw_answers": {
+              "operation": {
+                "type": "choice",
+                "choice": "TYPE_TEXT",
+                "probabilities": {
+                  "TYPE_TEXT": 1,
+                  "CLICK": 0,
+                  "BLOCKED": 0,
+                  "DONE": 0
+                },
+                "confidence": 0.99
+              },
+              "type_text_target": {
+                "type": "choice",
+                "choice": "1",
+                "probabilities": {
+                  "1": 0.97,
+                  "2": 0.03
+                },
+                "confidence": 0.94
+              },
+              "click_target": {
+                "type": "choice",
+                "choice": "3",
+                "probabilities": {
+                  "3": 1
+                },
+                "confidence": 1
+              }
+            },
+            "model": "typesafe/jev-1.13",
+            "provider": "openrouter",
+            "usage": {
+              "input_tokens": 1708,
+              "output_tokens": 101,
+              "cost": 7.1736e-05
+            },
+            "latency_ms": 124,
+            "routing": {
+              "policy": "jev",
+              "profile": "jev",
+              "route": "jev",
+              "fallback": false,
+              "reason": null,
+              "model_calls": [
+                {
+                  "provider": "openrouter",
+                  "model": "typesafe/jev-1.13",
+                  "role": "decision",
+                  "usage": {
+                    "input_tokens": 1708,
+                    "output_tokens": 101,
+                    "cost": 7.1736e-05
+                  },
+                  "success": true,
+                  "http_status": 200,
+                  "latency_ms": 123
+                }
+              ],
+              "latency_ms": 124,
+              "jev_latency_ms": 123,
+              "fallback_latency_ms": 0,
+              "jev_usage": {
+                "input_tokens": 1708,
+                "output_tokens": 101,
+                "cost": 7.1736e-05
+              },
+              "fallback_usage": {}
+            },
+            "jev_usage": {
+              "input_tokens": 1708,
+              "output_tokens": 101,
+              "cost": 7.1736e-05
+            },
+            "fallback_usage": {}
+          },
+          "error": "ValueError",
+          "routing": {},
+          "model_call": null
+        }
+      ],
+      "final": "- main:\n  - heading \"Create a travel note\" [level=1]\n  - text: Title\n  - textbox \"Title\"\n  - text: Note\n  - textbox \"Note\"\n  - button \"Save note\"",
+      "content": {
+        "heading": "Create a travel note",
+        "paragraphs": []
+      }
+    }
+  ],
+  "expected_unsupported": [
+    {
+      "profile": "jev",
+      "task": "note",
+      "reason": "No field writer"
+    }
+  ]
+}

@@ -1,0 +1,610 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "version": 1,
+  "serialNumber": "urn:uuid:62fe96d3-ba00-4ddf-b4ca-aa3c5eed0c6e",
+  "metadata": {
+    "timestamp": "2026-09-21T23:05:20.631501000Z",
+    "tools": [
+      {
+        "vendor": "Astral Software Inc.",
+        "name": "uv",
+        "version": "0.11.16"
+      }
+    ],
+    "component": {
+      "type": "library",
+      "bom-ref": "jev-qwerebras-ultrafast-1@0.1.0",
+      "name": "jev-qwerebras-ultrafast",
+      "version": "0.1.0",
+      "properties": [
+        {
+          "name": "uv:package:is_project_root",
+          "value": "true"
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "bom-ref": "annotated-types-2@0.8.0",
+      "name": "annotated-types",
+      "version": "0.8.0",
+      "purl": "pkg:pypi/annotated-types@0.8.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "anyio-3@4.15.1",
+      "name": "anyio",
+      "version": "4.15.1",
+      "purl": "pkg:pypi/anyio@4.15.1"
+    },
+    {
+      "type": "library",
+      "bom-ref": "attrs-4@26.1.0",
+      "name": "attrs",
+      "version": "26.1.0",
+      "purl": "pkg:pypi/attrs@26.1.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "browser-harness-5@0.1.13",
+      "name": "browser-harness",
+      "version": "0.1.13",
+      "purl": "pkg:pypi/browser-harness@0.1.13"
+    },
+    {
+      "type": "library",
+      "bom-ref": "cdp-use-6@1.4.5",
+      "name": "cdp-use",
+      "version": "1.4.5",
+      "purl": "pkg:pypi/cdp-use@1.4.5"
+    },
+    {
+      "type": "library",
+      "bom-ref": "certifi-7@2026.7.22",
+      "name": "certifi",
+      "version": "2026.7.22",
+      "purl": "pkg:pypi/certifi@2026.7.22"
+    },
+    {
+      "type": "library",
+      "bom-ref": "cffi-8@2.1.1",
+      "name": "cffi",
+      "version": "2.1.1",
+      "purl": "pkg:pypi/cffi@2.1.1",
+      "properties": [
+        {
+          "name": "uv:package:marker",
+          "value": "platform_python_implementation != 'PyPy'"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "click-9@8.5.0",
+      "name": "click",
+      "version": "8.5.0",
+      "purl": "pkg:pypi/click@8.5.0",
+      "properties": [
+        {
+          "name": "uv:package:marker",
+          "value": "sys_platform != 'emscripten'"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "cryptography-10@50.0.1",
+      "name": "cryptography",
+      "version": "50.0.1",
+      "purl": "pkg:pypi/cryptography@50.0.1"
+    },
+    {
+      "type": "library",
+      "bom-ref": "fetch-use-11@0.4.0",
+      "name": "fetch-use",
+      "version": "0.4.0",
+      "purl": "pkg:pypi/fetch-use@0.4.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "h11-12@0.16.0",
+      "name": "h11",
+      "version": "0.16.0",
+      "purl": "pkg:pypi/h11@0.16.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "h2-13@4.4.1",
+      "name": "h2",
+      "version": "4.4.1",
+      "purl": "pkg:pypi/h2@4.4.1"
+    },
+    {
+      "type": "library",
+      "bom-ref": "hpack-14@4.2.0",
+      "name": "hpack",
+      "version": "4.2.0",
+      "purl": "pkg:pypi/hpack@4.2.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "httpcore-15@1.0.9",
+      "name": "httpcore",
+      "version": "1.0.9",
+      "purl": "pkg:pypi/httpcore@1.0.9"
+    },
+    {
+      "type": "library",
+      "bom-ref": "httpcore2-16@2.13.0",
+      "name": "httpcore2",
+      "version": "2.13.0",
+      "purl": "pkg:pypi/httpcore2@2.13.0",
+      "properties": [
+        {
+          "name": "uv:package:marker",
+          "value": "sys_platform != 'emscripten'"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "httpx-17@0.28.1",
+      "name": "httpx",
+      "version": "0.28.1",
+      "purl": "pkg:pypi/httpx@0.28.1"
+    },
+    {
+      "type": "library",
+      "bom-ref": "httpx2-18@2.13.0",
+      "name": "httpx2",
+      "version": "2.13.0",
+      "purl": "pkg:pypi/httpx2@2.13.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "httpx2-jsfetch-19@1.0",
+      "name": "httpx2-jsfetch",
+      "version": "1.0",
+      "purl": "pkg:pypi/httpx2-jsfetch@1.0",
+      "properties": [
+        {
+          "name": "uv:package:marker",
+          "value": "sys_platform == 'emscripten'"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "hyperframe-20@6.1.0",
+      "name": "hyperframe",
+      "version": "6.1.0",
+      "purl": "pkg:pypi/hyperframe@6.1.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "idna-21@3.19",
+      "name": "idna",
+      "version": "3.19",
+      "purl": "pkg:pypi/idna@3.19"
+    },
+    {
+      "type": "library",
+      "bom-ref": "jsonschema-22@4.26.0",
+      "name": "jsonschema",
+      "version": "4.26.0",
+      "purl": "pkg:pypi/jsonschema@4.26.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "jsonschema-specifications-23@2025.9.1",
+      "name": "jsonschema-specifications",
+      "version": "2025.9.1",
+      "purl": "pkg:pypi/jsonschema-specifications@2025.9.1"
+    },
+    {
+      "type": "library",
+      "bom-ref": "mcp-24@2.2.0",
+      "name": "mcp",
+      "version": "2.2.0",
+      "purl": "pkg:pypi/mcp@2.2.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "mcp-types-25@2.2.0",
+      "name": "mcp-types",
+      "version": "2.2.0",
+      "purl": "pkg:pypi/mcp-types@2.2.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "opentelemetry-api-26@1.44.0",
+      "name": "opentelemetry-api",
+      "version": "1.44.0",
+      "purl": "pkg:pypi/opentelemetry-api@1.44.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pillow-27@12.3.0",
+      "name": "pillow",
+      "version": "12.3.0",
+      "purl": "pkg:pypi/pillow@12.3.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pycparser-28@3.0",
+      "name": "pycparser",
+      "version": "3.0",
+      "purl": "pkg:pypi/pycparser@3.0",
+      "properties": [
+        {
+          "name": "uv:package:marker",
+          "value": "implementation_name != 'PyPy' and platform_python_implementation != 'PyPy'"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pydantic-29@2.13.5",
+      "name": "pydantic",
+      "version": "2.13.5",
+      "purl": "pkg:pypi/pydantic@2.13.5"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pydantic-core-30@2.46.5",
+      "name": "pydantic-core",
+      "version": "2.46.5",
+      "purl": "pkg:pypi/pydantic-core@2.46.5"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pyjwt-31@2.14.0",
+      "name": "pyjwt",
+      "version": "2.14.0",
+      "purl": "pkg:pypi/pyjwt@2.14.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "python-multipart-32@0.0.32",
+      "name": "python-multipart",
+      "version": "0.0.32",
+      "purl": "pkg:pypi/python-multipart@0.0.32"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pywin32-33@312",
+      "name": "pywin32",
+      "version": "312",
+      "purl": "pkg:pypi/pywin32@312",
+      "properties": [
+        {
+          "name": "uv:package:marker",
+          "value": "sys_platform == 'win32'"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "referencing-34@0.37.0",
+      "name": "referencing",
+      "version": "0.37.0",
+      "purl": "pkg:pypi/referencing@0.37.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "rpds-py-35@2026.6.3",
+      "name": "rpds-py",
+      "version": "2026.6.3",
+      "purl": "pkg:pypi/rpds-py@2026.6.3"
+    },
+    {
+      "type": "library",
+      "bom-ref": "sse-starlette-36@3.4.11",
+      "name": "sse-starlette",
+      "version": "3.4.11",
+      "purl": "pkg:pypi/sse-starlette@3.4.11"
+    },
+    {
+      "type": "library",
+      "bom-ref": "starlette-37@1.6.0",
+      "name": "starlette",
+      "version": "1.6.0",
+      "purl": "pkg:pypi/starlette@1.6.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "truststore-38@0.10.4",
+      "name": "truststore",
+      "version": "0.10.4",
+      "purl": "pkg:pypi/truststore@0.10.4",
+      "properties": [
+        {
+          "name": "uv:package:marker",
+          "value": "sys_platform != 'emscripten'"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "typing-extensions-39@4.16.0",
+      "name": "typing-extensions",
+      "version": "4.16.0",
+      "purl": "pkg:pypi/typing-extensions@4.16.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "typing-inspection-40@0.4.4",
+      "name": "typing-inspection",
+      "version": "0.4.4",
+      "purl": "pkg:pypi/typing-inspection@0.4.4"
+    },
+    {
+      "type": "library",
+      "bom-ref": "uvicorn-41@0.53.0",
+      "name": "uvicorn",
+      "version": "0.53.0",
+      "purl": "pkg:pypi/uvicorn@0.53.0",
+      "properties": [
+        {
+          "name": "uv:package:marker",
+          "value": "sys_platform != 'emscripten'"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "websockets-42@15.0.1",
+      "name": "websockets",
+      "version": "15.0.1",
+      "purl": "pkg:pypi/websockets@15.0.1"
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "annotated-types-2@0.8.0"
+    },
+    {
+      "ref": "anyio-3@4.15.1",
+      "dependsOn": [
+        "idna-21@3.19",
+        "typing-extensions-39@4.16.0"
+      ]
+    },
+    {
+      "ref": "attrs-4@26.1.0"
+    },
+    {
+      "ref": "browser-harness-5@0.1.13",
+      "dependsOn": [
+        "cdp-use-6@1.4.5",
+        "fetch-use-11@0.4.0",
+        "pillow-27@12.3.0",
+        "websockets-42@15.0.1"
+      ]
+    },
+    {
+      "ref": "cdp-use-6@1.4.5",
+      "dependsOn": [
+        "httpx-17@0.28.1",
+        "typing-extensions-39@4.16.0",
+        "websockets-42@15.0.1"
+      ]
+    },
+    {
+      "ref": "certifi-7@2026.7.22"
+    },
+    {
+      "ref": "cffi-8@2.1.1",
+      "dependsOn": [
+        "pycparser-28@3.0"
+      ]
+    },
+    {
+      "ref": "click-9@8.5.0"
+    },
+    {
+      "ref": "cryptography-10@50.0.1",
+      "dependsOn": [
+        "cffi-8@2.1.1"
+      ]
+    },
+    {
+      "ref": "fetch-use-11@0.4.0"
+    },
+    {
+      "ref": "h11-12@0.16.0"
+    },
+    {
+      "ref": "h2-13@4.4.1",
+      "dependsOn": [
+        "hpack-14@4.2.0",
+        "hyperframe-20@6.1.0"
+      ]
+    },
+    {
+      "ref": "hpack-14@4.2.0"
+    },
+    {
+      "ref": "httpcore-15@1.0.9",
+      "dependsOn": [
+        "certifi-7@2026.7.22",
+        "h11-12@0.16.0"
+      ]
+    },
+    {
+      "ref": "httpcore2-16@2.13.0",
+      "dependsOn": [
+        "h11-12@0.16.0",
+        "truststore-38@0.10.4"
+      ]
+    },
+    {
+      "ref": "httpx-17@0.28.1",
+      "dependsOn": [
+        "anyio-3@4.15.1",
+        "certifi-7@2026.7.22",
+        "h2-13@4.4.1",
+        "httpcore-15@1.0.9",
+        "idna-21@3.19"
+      ]
+    },
+    {
+      "ref": "httpx2-18@2.13.0",
+      "dependsOn": [
+        "anyio-3@4.15.1",
+        "httpcore2-16@2.13.0",
+        "httpx2-jsfetch-19@1.0",
+        "idna-21@3.19",
+        "truststore-38@0.10.4",
+        "typing-extensions-39@4.16.0"
+      ]
+    },
+    {
+      "ref": "httpx2-jsfetch-19@1.0"
+    },
+    {
+      "ref": "hyperframe-20@6.1.0"
+    },
+    {
+      "ref": "idna-21@3.19"
+    },
+    {
+      "ref": "jsonschema-22@4.26.0",
+      "dependsOn": [
+        "attrs-4@26.1.0",
+        "jsonschema-specifications-23@2025.9.1",
+        "referencing-34@0.37.0",
+        "rpds-py-35@2026.6.3"
+      ]
+    },
+    {
+      "ref": "jsonschema-specifications-23@2025.9.1",
+      "dependsOn": [
+        "referencing-34@0.37.0"
+      ]
+    },
+    {
+      "ref": "mcp-24@2.2.0",
+      "dependsOn": [
+        "anyio-3@4.15.1",
+        "httpx2-18@2.13.0",
+        "jsonschema-22@4.26.0",
+        "mcp-types-25@2.2.0",
+        "opentelemetry-api-26@1.44.0",
+        "pydantic-29@2.13.5",
+        "pyjwt-31@2.14.0",
+        "python-multipart-32@0.0.32",
+        "pywin32-33@312",
+        "sse-starlette-36@3.4.11",
+        "starlette-37@1.6.0",
+        "typing-extensions-39@4.16.0",
+        "typing-inspection-40@0.4.4",
+        "uvicorn-41@0.53.0"
+      ]
+    },
+    {
+      "ref": "mcp-types-25@2.2.0",
+      "dependsOn": [
+        "pydantic-29@2.13.5",
+        "typing-extensions-39@4.16.0"
+      ]
+    },
+    {
+      "ref": "opentelemetry-api-26@1.44.0",
+      "dependsOn": [
+        "typing-extensions-39@4.16.0"
+      ]
+    },
+    {
+      "ref": "pillow-27@12.3.0"
+    },
+    {
+      "ref": "pycparser-28@3.0"
+    },
+    {
+      "ref": "pydantic-29@2.13.5",
+      "dependsOn": [
+        "annotated-types-2@0.8.0",
+        "pydantic-core-30@2.46.5",
+        "typing-extensions-39@4.16.0",
+        "typing-inspection-40@0.4.4"
+      ]
+    },
+    {
+      "ref": "pydantic-core-30@2.46.5",
+      "dependsOn": [
+        "typing-extensions-39@4.16.0"
+      ]
+    },
+    {
+      "ref": "pyjwt-31@2.14.0",
+      "dependsOn": [
+        "cryptography-10@50.0.1"
+      ]
+    },
+    {
+      "ref": "python-multipart-32@0.0.32"
+    },
+    {
+      "ref": "pywin32-33@312"
+    },
+    {
+      "ref": "referencing-34@0.37.0",
+      "dependsOn": [
+        "attrs-4@26.1.0",
+        "rpds-py-35@2026.6.3",
+        "typing-extensions-39@4.16.0"
+      ]
+    },
+    {
+      "ref": "rpds-py-35@2026.6.3"
+    },
+    {
+      "ref": "sse-starlette-36@3.4.11",
+      "dependsOn": [
+        "anyio-3@4.15.1",
+        "starlette-37@1.6.0"
+      ]
+    },
+    {
+      "ref": "starlette-37@1.6.0",
+      "dependsOn": [
+        "anyio-3@4.15.1",
+        "typing-extensions-39@4.16.0"
+      ]
+    },
+    {
+      "ref": "truststore-38@0.10.4"
+    },
+    {
+      "ref": "typing-extensions-39@4.16.0"
+    },
+    {
+      "ref": "typing-inspection-40@0.4.4",
+      "dependsOn": [
+        "typing-extensions-39@4.16.0"
+      ]
+    },
+    {
+      "ref": "uvicorn-41@0.53.0",
+      "dependsOn": [
+        "click-9@8.5.0",
+        "h11-12@0.16.0"
+      ]
+    },
+    {
+      "ref": "websockets-42@15.0.1"
+    },
+    {
+      "ref": "jev-qwerebras-ultrafast-1@0.1.0",
+      "dependsOn": [
+        "browser-harness-5@0.1.13",
+        "httpx-17@0.28.1",
+        "mcp-24@2.2.0"
+      ]
+    }
+  ]
+}

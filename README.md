@@ -1,138 +1,119 @@
-<img src="docs/banner.svg" alt="Jev Ultrafast · Browser Use × TypeSafe" width="100%" />
+# Browser Bolt
 
-# Jev Ultrafast ⚡
+A local BYOK decision MCP for browser-capable hosts. Your host supplies observed page actions; Jev chooses an operation and target, and a paired Qwen model supplies field text when needed. Your host executes the action and checks the result. The MCP does not accept screenshots or operate the browser itself.
 
-**A browser agent with a dynamic, indexed action space.**
+Start with [MCP installation and the tested dependency set](docs/MCP.md). The recommended route needs one OpenRouter key. No account or subscription is required. The package and commands retain their `jev-qwerebras` names for compatibility.
 
-Give it one goal. [TypeSafe's Jev](https://docs.typesafe.ai/introduction) picks an operation and an element. A small LLM writes text only when the operation is `TYPE_TEXT`.
+The native browser demo below additionally supports Cerebras Qwen decision fallback. MCP comparison profiles do not enable that fallback. This is an experimental developer preview; named desktop-host integrations remain unverified.
 
-**Zürich → London on Google Flights in 7.1 seconds.** One natural-language goal, actual text generation, and loading waits included.
+This fork derives from [browser-use/jev-ultrafast](https://github.com/browser-use/jev-ultrafast) at commit `452c1ad2dd628008f1d5608f28158d76e49e6cc0`. The original [MIT license](LICENSE) and Browser Use attribution are retained. Python imports remain `jev_ultrafast` for compatibility.
 
-<a href="docs/demo.mp4"><img src="docs/demo.gif" alt="A real Google Flights search at 1× speed, with generated city names and dynamic operation/target decisions" width="100%" /></a>
+## Try the packaged host
 
-[Watch the MP4](docs/demo.mp4) · [Measurements](docs/performance.md) · [Read the loop](jev_ultrafast/agent.py)
+The [reference host](docs/HOST.md) connects the actual MCP server to Browser Harness. It runs six packaged synthetic tasks, executes observed actions, and checks the final page independently. Start with a check that needs no key or browser:
 
-## The action space
-
-Every observation produces a new element table:
-
-```text
-[1] button    Change ticket type · Round trip
-[2] combobox  Where from?        · San Francisco
-[3] combobox  Where to?          · empty
-[4] textbox   Departure          · empty
-...
+```sh
+uv sync --locked --extra mcp
+uv run --frozen --extra mcp jev-qwerebras-host --preflight
 ```
 
-The operations are `CLICK`, `TYPE_TEXT`, `SELECT`, `SCROLL_UP`, `SCROLL_DOWN`, `WAIT`, `DONE`, and `BLOCKED`. Only supported operations and targets are offered.
+After connecting a dedicated Chrome profile and supplying your provider key, run a fixture explicitly:
 
-```text
-                      one TypeSafe request
-                     ┌───────────────────────────┐
-page → element table → operation                 │
-                     │ click_target              │
-                     │ type_text_target          │
-                     │ select_target, if present │
-                     └─────────────┬─────────────┘
-                         use the matching target
-                                   │
-                    CLICK [7] ─────┤──→ browser
-                TYPE_TEXT [3] ─────┘
-                          ↓
-                   small LLM → text → browser
+```sh
+uv run --frozen --extra mcp jev-qwerebras-host --live --task choice --output choice-result.json
 ```
 
-Target questions are speculative. If the operation is `CLICK`, only `click_target` can execute. Two decisions, **one network round trip**. Each target head contains only compatible elements. Native dropdown choices carry an observed element/option index.
+Live mode incurs provider usage. It only accepts packaged synthetic fixtures. The decision MCP can support broader workflows through your own browser-capable host and authorization rules. See the [installed-wheel live acceptance results](docs/LIVE_HOST.md) for the tested macOS setup and timing boundaries.
 
-There are no site-specific action scripts or prepared field strings in the policy. The Flights example supplies a goal and independently verifies the outcome. The screenshot renderer adds labels afterward; it does not drive the browser.
+## Native browser demo
 
-## Try it
+Requires Python 3.12 or newer, [uv](https://docs.astral.sh/uv/), and Chrome connected through [Browser Harness](https://github.com/browser-use/browser-harness).
 
-```bash
-git clone https://github.com/browser-use/jev-ultrafast.git
-cd jev-ultrafast
-uv sync
+```sh
+uv sync --locked
 cp .env.example .env
-# Add TYPESAFE_API_KEY and TEXT_MODEL_API_KEY.
-uv run jev
+# Set OPENROUTER_API_KEY and CEREBRAS_API_KEY in .env.
+uv run jev-qwerebras
 ```
 
-Open **http://127.0.0.1:8766** and click **Start demo → Run automatically**. The inspector shows numbered elements, operation probabilities, target probabilities, and executed actions. **Choose next** pauses before execution.
+Open **http://127.0.0.1:8766**. Use a local scenario for the first run. If Chrome is not connected, run `uv run browser-harness --doctor` and follow its setup instructions. Browser Harness is included in the project dependencies. Browser tabs share the connected Chrome profile.
 
-Chrome connects through [Browser Harness](https://github.com/browser-use/browser-harness), installed by `uv sync`. Run `uv run browser-harness --doctor` if it needs connecting. Allow remote debugging in Chrome when prompted.
+For an existing environment file outside the checkout:
 
-`TEXT_MODEL_API_KEY` is an OpenRouter key in the example configuration. The current demo uses `inception/mercury-2.5` with reasoning disabled. Gemini, GLM, and DeepSeek can also use the OpenAI-compatible text helper; configure the appropriate model, endpoint, and reasoning setting.
-
-## Use the library
-
-```python
-from jev_ultrafast import Agent
-
-with Agent(
-    "https://www.google.com/travel/flights?hl=en",
-    "Find one-way flights from Zurich to London on September 20, 2026, "
-    "for one adult in economy. Stop when matching flight options are visible.",
-) as agent:
-    for state in agent.run():
-        print(state["elapsed_ms"], state["status"])
+```sh
+python3 local/run_hybrid.py --env-file /path/to/provider.env
 ```
 
-Run with `uv run --env-file .env python your_script.py`. The same policy can run a different task:
+The launcher reads the selected file into its process environment without copying it. It also accepts `HYBRID_KEYS_FILE`, otherwise uses the checkout's `.env` when present. Existing process variables take precedence. See [HYBRID.md](HYBRID.md) for configuration details.
 
-```bash
-uv run --env-file .env python examples/run.py \
-  --url https://en.wikipedia.org/wiki/Main_Page \
-  --goal 'Find and open the Wikipedia article about Gödel’s incompleteness theorems.'
-```
+## Policy
 
-`uv run --env-file .env python examples/flights.py --keep-open` performs the flight search, checks the actual route/date/results, and saves its trace. It does not select or book a flight.
-
-## Why it moves
-
-- **One request per decision cycle.** Operation and target heads share the same observed state.
-- **No screenshots in the default agent loop.** Jev consumes structured state. The inspector opts into screenshots; the video uses a separate continuous screencast.
-- **One browser call per snapshot.** Read visible controls, their names, values, and text atomically. Keep references to the actual DOM nodes.
-- **Validate the selected target.** Clicks check the document, form values, target, and nearby context. Animation alone does not force another prediction. Resolve current geometry and reject covered controls before input.
-- **Wait for useful state.** After typing into a combobox, wait for visible suggestions, capped at 200 ms. Other interactions get at most two animation frames or 50 ms. These reads happen after execution is logged.
-- **Keep hidden tabs rendering.** Focus emulation prevents background animation throttling without switching Chrome's visible tab.
-- **Send visible text.** Offscreen article bodies and footers do not fill the model context.
-- **Reuse an interrupted text request.** A generated value survives a stale-page retry only if the entire text-helper input is unchanged.
-
-Every executed target is resolved from an observed node. The executor rechecks page freshness and click occlusion. Model output never becomes selectors, coordinates, shell commands, or executable JavaScript. Text-helper output must parse as a small JSON object before typing.
-
-## Small enough to read
-
-| File | Job |
+| `QWEV_POLICY` | Decision path |
 | --- | --- |
-| [agent.py](jev_ultrafast/agent.py) | The complete loop and text-helper handoff |
-| [snapshot.js](jev_ultrafast/snapshot.js) | Atomic DOM snapshot, indexed controls, freshness guards |
-| [browser.py](jev_ultrafast/browser.py) | Browser connection, current geometry, execution |
-| [model.py](jev_ultrafast/model.py) | Dynamic operation/target heads and text generation |
-| [questions.py](jev_ultrafast/questions.py) | Model instructions |
-| [demo.py](jev_ultrafast/demo.py) | Local inspector |
+| `hybrid` (default) | Jev first, with at most one Qwen decision fallback. |
+| `jev` | Jev decisions with a Qwen field-writing request for `TYPE_TEXT`; no decision fallback. |
+| `qwen` | Qwen selects an action and supplies typing text in one request. |
 
-## Evidence and limits
+Hybrid mode routes to Qwen when Jev is unavailable, returns `BLOCKED`, falls below the configured confidence threshold, or recent actions repeatedly make no progress. `QWEV_CONFIDENCE_THRESHOLD` defaults to `0.6`; this is an experimental routing cutoff, not a measured success probability. `QWEV_CEREBRAS_MODEL` configures the Qwen decision model, independently of the `TEXT_MODEL` field writer.
 
-The current video is a **7,073 ms** Google Flights run. Timing starts after initial page observation and includes model calls, generated text, browser work, stale decisions, and loading waits. A fresh independent check verifies the one-way setting, Zürich, London, September 20, 2026, and visible flight options. The video plays at 1×, with no opening hold and a 0.5-second final hold.
+Fallback output must identify an observed action with a compatible operation. Browser freshness, target identity, and occlusion checks still apply. Model-supplied selectors and code do not execute. Browser mutations are never automatically retried. A `DONE` decision requires an independent task-specific outcome check; the inspector's status is not proof of success.
 
-In six alternating runs with identical models and settings, both versions passed **3/3**. Median task time went from **9.450 s → 7.092 s**, a **25% reduction**; median browser protocol calls went from **1,092 → 101**. This is three repeats of one task on one browser profile, not a general reliability benchmark.
+## Connections and failure behavior
 
-The same policy opened the requested Wikipedia article in **2.798 s** and passed a local hotel search/filter task in **1.896 s**. Runs, failures, source hashes, and measurement boundaries are in [performance.md](docs/performance.md).
+A process-wide HTTP/2 client reuses provider connections. It allows eight connections and retains four keepalive connections for up to 120 seconds. Connect timeout is 2 seconds, read/write timeouts are 5 seconds, and pool timeout is 1 second. These are phase/inactivity limits, not a total wall-clock deadline. The client closes on process exit.
 
-A `DONE` choice still requires independent outcome verification. The DOM reader handles common HTML and ARIA controls, not the full accessible-name specification. Shadow roots, frames, canvas, uploads, pop-up tabs, nested scrolling, and arbitrary keyboard widgets remain outside this MVP. Owned tabs share the existing Chrome profile.
+There is no provider retry or sleep loop. In hybrid mode a Jev provider failure can move to Qwen immediately; a timeout still costs its elapsed wait. Qwen failure or invalid fallback output stops without an action. Fallback depth is bounded, rather than guaranteeing a successful decision.
+
+## Evidence and limitations
+
+See [BENCHMARK.md](BENCHMARK.md) for this fork's measurements, tested layers, and limitations. Preserved upstream documentation and media describe upstream experiments, not performance achieved by this fork. The [upstream README](docs/UPSTREAM-README.md) is retained for attribution and historical context.
+
+Goals, page text, editable values, and action history can be sent to providers and appear in local traces. Use synthetic inputs while evaluating. This prototype has no credential broker, secret-reference boundary, or general redaction layer. See [SECURITY.md](SECURITY.md) for the data boundary and reporting guidance. Frames, shadow roots, canvas, and arbitrary keyboard widgets remain outside the DOM reader's supported surface.
 
 ## Development
 
-```bash
-uv run ruff check .
-uv run pytest
+```sh
+uv sync --locked --extra mcp
+uv run --frozen --extra mcp pytest
+uv run --frozen --extra mcp ruff check .
 node --check jev_ultrafast/static/app.js
 node --check jev_ultrafast/snapshot.js
+node --check local/browser_driver.js
 uv build
 ```
 
-Tests are offline. `uv run python scripts/check_guards.py` checks real controls in a local browser without model calls. Live examples and recording scripts make paid API calls. `scripts/record_flights.py <new-folder>` captures original browser timestamps; `scripts/render_demo.py <recording-folder>` renders that verified run at 1× and crops out the Google account strip. Credentials and raw traces stay ignored.
+The test suite uses provider doubles and does not call paid APIs. Live probes under `local/` do call providers; their output belongs in ignored `artifacts/`. CI runs the offline suite, lint, JavaScript syntax checks, and package build. No static Python type checker is configured.
 
----
+## Compare models
 
-[Browser Use](https://github.com/browser-use/browser-use) · [Browser Harness](https://github.com/browser-use/browser-harness) · [TypeSafe speculative fan-out](https://docs.typesafe.ai/patterns/fan-out)
+The packaged benchmark supports Cerebras Qwen, GPT-6 Astra, Claude Opus 5, each paired with Jev, and a true Jev-only profile. Paired comparison profiles use their partner for field text and do not enable decision fallback. The inspector retains its default Jev + Qwen hybrid policy.
+
+Preview a balanced schedule without credentials or browser access:
+
+```sh
+uv run jev-qwerebras-benchmark --dry-run --runs 3
+```
+
+Run the synthetic suite explicitly after connecting Browser Harness and configuring provider keys:
+
+```sh
+uv run jev-qwerebras-benchmark --env-file /path/to/provider.env --runs 3 --output artifacts/comparison.json
+```
+
+This command makes paid API calls. Results separate browser setup from task time, verify visible outcomes independently, and retain costs from failed attempts. Use `--profiles jev --tasks choice` to measure Jev alone without a text writer. See the [measured pilot and comparison limits](docs/COMPARISON.md). The initial pilot used the Codex Chrome adapter. Subsequent native Browser Harness checks use a dedicated local Chrome profile; see the sprint report for the separate evidence.
+
+## MCP and product direction
+
+The optional MCP package exposes a fast decision service to an existing browser-capable host. It returns an observed action choice and, when needed, field text; the host executes and verifies the browser action. The standalone Agent and benchmark remain available for native Browser Harness execution.
+
+See [MCP setup](docs/MCP.md) and the [five-sprint evidence](docs/SPRINTS.md). OpenRouter-only profiles `qwen_openrouter` and `jev_qwen_openrouter` need only `OPENROUTER_API_KEY`. Direct `qwen` and `jev_qwen` retain Cerebras and its separately measured performance. Do not treat provider routes as interchangeable speed claims.
+
+The new `checkout`, `onboarding`, and `recovery` tasks are original synthetic fixtures based on common product interactions. They complement the initial three tasks; they are not an official external benchmark. Production managed accounts, payment collection, credits, and hosted inference remain planned work. A separate repository-only website preview exercises synthetic signup, account display and a test-only billing contract; it is not a managed service.
+
+Verification includes offline failure and security tests, a clean installed-wheel MCP smoke, four verified live checkout runs through the packaged MCP host, and a separate 48-attempt native browser cohort with 47 verified successes. See [live host acceptance](docs/LIVE_HOST.md) and [native results](docs/NATIVE_COMPARISON.md) for their different timing boundaries and limits. This is a BYOK developer preview; managed subscriptions remain planned.
+
+## Release integrity
+
+Release downloads contain a wheel, source archive, hash-locked runtime requirements, a CycloneDX inventory, SHA256SUMS, and a public manifest. Verify checksums before installing. The [release procedure](docs/RELEASE.md) binds the reviewed source, downloads, website and destination to one approval digest. It stops on drift or an uncertain remote creation rather than assuming publication succeeded.
+
+The public package excludes the internal launch board and managed billing prototype. Source builds and published release assets have different installation paths; follow [MCP installation](docs/MCP.md) for the path you chose.
