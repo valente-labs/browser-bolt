@@ -193,6 +193,16 @@ class Agent:
                 state["elapsed_ms"] = round((time.perf_counter() - state["started_at"]) * 1000)
                 return self.snapshot()
             action = next(a for a in page["actions"] if a["id"] == selected)
+            # A new decision can repeat an already executed input without any visible change.
+            # Keep this evidence even when the post-action observation failed or a WAIT intervened.
+            if action["kind"] in {"click", "select"} and any(
+                h.get("fingerprint") == page["fingerprint"] and h["choice"] == selected
+                for h in state["history"]
+            ):
+                if not state["browser"].fresh(page):
+                    state["status"] = "ready"
+                    raise StalePage("Page changed before duplicate check. Choose again.")
+                self._stop("duplicate_mutation")
             if len(state["history"]) >= MAX_STEPS:
                 state["status"] = "blocked"
                 raise ValueError(f"Stopped at the {MAX_STEPS}-action demo budget")
@@ -240,6 +250,7 @@ class Agent:
                     "action": action["label"],
                     "kind": action["kind"],
                     "choice": selected,
+                    "fingerprint": page["fingerprint"],
                     "probability": decision["probabilities"].get(selected),
                     "confidence": decision["confidence"],
                     "latency_ms": decision["latency_ms"],

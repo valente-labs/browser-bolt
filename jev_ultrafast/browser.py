@@ -7,7 +7,7 @@ import time
 from pathlib import Path
 
 from browser_harness.admin import ensure_daemon
-from browser_harness.helpers import cdp
+from browser_harness.helpers import _send, cdp
 
 # Atomically read visible content and controls, preserving actual DOM node identity.
 READ_STATE = Path(__file__).with_name("snapshot.js").read_text()
@@ -17,15 +17,39 @@ class StalePage(ValueError):
     """A decision no longer refers to the observed page."""
 
 
+class MutationUncertain(RuntimeError):
+    """Input may already have had side effects; do not automatically retry."""
+
+
+class DialogBlocked(MutationUncertain):
+    """A native dialog needs human handling; never retry or resolve it implicitly."""
+
+
+def check_dialog():
+    # Harness 0.1.13 exposes one global dialog without session attribution. Fail
+    # closed even for another tab, and never drain its events or handle its dialog.
+    dialog = _send({"meta": "pending_dialog"}, response_timeout=1)["dialog"]
+    if dialog:
+        kind = dialog.get("type")
+        kind = kind if kind in {"alert", "confirm", "prompt", "beforeunload"} else "JavaScript"
+        raise DialogBlocked(f"Browser blocked by a {kind} dialog; inspect before retrying.")
+
+
 class Browser:
-    def __init__(self, url):
+    def __init__(self, url, *, fresh_context=False):
         self.target = None
         self.session = None
+        self.context = None
         self.cleanup_error = None
         ensure_daemon()
-        self.target = cdp("Target.createTarget", url="about:blank", background=True)["targetId"]
         try:
+            if fresh_context:
+                self.context = cdp("Target.createBrowserContext", disposeOnDetach=True)["browserContextId"]
+            params = {"browserContextId": self.context} if self.context else {}
+            self.target = cdp("Target.createTarget", url="about:blank", background=True, **params)["targetId"]
             self.session = cdp("Target.attachToTarget", targetId=self.target, flatten=True)["sessionId"]
+            # Subscribe before navigation: otherwise Chrome may suppress native dialogs.
+            self.call("Page.enable")
             self.call("Emulation.setDeviceMetricsOverride", width=1120, height=780, deviceScaleFactor=1, mobile=False)
             # Keep rAF/menus rendering in an owned background tab, without activating the user's Chrome tab.
             self.call("Emulation.setFocusEmulationEnabled", enabled=True)
@@ -48,7 +72,15 @@ class Browser:
             raise
 
     def call(self, method, **params):
-        return cdp(method, session_id=self.session, **params)
+        check_dialog()
+        try:
+            result = cdp(method, session_id=self.session, _response_timeout=5, **params)
+        except (RuntimeError, TimeoutError):
+            # A dialog can appear after the preflight and hold a CDP reply open.
+            check_dialog()
+            raise
+        check_dialog()
+        return result
 
     def evaluate(self, expression):
         response = self.call("Runtime.evaluate", expression=expression, returnByValue=True)
@@ -87,12 +119,14 @@ class Browser:
                     awaitPromise=True,
                     returnByValue=True,
                 )
+            except DialogBlocked:
+                raise
             except RuntimeError:
                 pass
         for attempt in range(10):
             try:
                 return browser_operation(
-                    {"operation": "observe", "session": self.session, "screenshot": screenshot}
+                    {"operation": "observe", "session": self.session, "screenshot": screenshot}, call=self.call
                 )
             except StalePage:
                 if attempt == 9:
@@ -119,11 +153,22 @@ class Browser:
             time.sleep(0.1)
         if getattr(self, "before_action", None):
             self.before_action()
-        result = browser_operation({"operation": "act", "session": self.session, "action": action, "text": text})
+        result = browser_operation(
+            {"operation": "act", "session": self.session, "action": action, "text": text}, call=self.call
+        )
         self.after_input = action if action["kind"] != "wait" else None
         return result
 
     def close(self):
+        if getattr(self, "context", None):
+            try:
+                # Disposal also owns popups and auxiliary targets in this context.
+                cdp("Target.disposeBrowserContext", browserContextId=self.context)
+            except BaseException as error:
+                self.cleanup_error = str(error)
+                raise
+            self.context = self.target = self.session = None
+            return
         if getattr(self, "target", None):
             try:
                 cdp("Target.closeTarget", targetId=self.target)
@@ -138,12 +183,13 @@ def fingerprint(state):
     return hashlib.sha256(json.dumps(content, sort_keys=True).encode()).hexdigest()
 
 
-def browser_operation(request):
+def browser_operation(request, call=None):
     operation = request["operation"]
     session = request["session"]
 
-    def call(method, **params):
-        return cdp(method, session_id=session, **params)
+    if call is None:
+        def call(method, **params):
+            return cdp(method, session_id=session, **params)
 
     def evaluate(expression):
         result = call("Runtime.evaluate", expression=expression, returnByValue=True)
@@ -152,6 +198,20 @@ def browser_operation(request):
                 raise RuntimeError("Dropdown execution was interrupted; inspect before retrying.")
             raise StalePage("Document changed during evaluation")
         return result.get("result", {}).get("value")
+
+    def require_fill_focus(node):
+        message = "Fill execution uncertain: target focus was not confirmed after input; inspect before retrying."
+        try:
+            focused = evaluate("""(node => {
+              const e=window.__jevFast?.nodes.get(node);
+              return !!e?.isConnected && document.activeElement===e && !e.matches(':disabled') &&
+                !e.closest('[aria-disabled="true"],[inert]') && !e.readOnly &&
+                e.getAttribute('aria-readonly')!=='true';
+            })(""" + json.dumps(node) + ")")
+        except Exception as error:
+            raise MutationUncertain(message) from error
+        if focused is not True:
+            raise MutationUncertain(message)
 
     if operation == "act":
         action = request["action"]
@@ -188,6 +248,8 @@ def browser_operation(request):
                 for event in ("mousePressed", "mouseReleased"):
                     call("Input.dispatchMouseEvent", type=event, x=x, y=y, button="left", clickCount=1)
                 if kind == "fill":
+                    # Click handlers can redirect focus. A click already happened, so this is never stale.
+                    require_fill_focus(action["node"])
                     call(
                         "Input.dispatchKeyEvent",
                         type="keyDown",
@@ -203,6 +265,8 @@ def browser_operation(request):
                         code="KeyA",
                         modifiers=4 if sys.platform == "darwin" else 2,
                     )
+                    # Keyboard handlers can redirect it again. Separate CDP calls are not atomic.
+                    require_fill_focus(action["node"])
                     call("Input.insertText", text=request["text"])
         return {"executed": action["id"]}
 
