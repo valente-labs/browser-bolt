@@ -50,7 +50,48 @@ def test_real_stdio_preflight_without_credentials(monkeypatch):
     assert result["ok"] and result["provider_calls"] == 0
     assert result["browser"] == "not contacted"
     assert result["tools"] == sorted(host.SCHEMAS)
+    assert len(result["tools"]) == 3 and len(result["profiles"]) == 10
+    assert result["browser_harness_version"] == host.EXPECTED_BROWSER_HARNESS_VERSION
     assert "onboarding" in result["fixtures"]
+
+
+def test_preflight_missing_browser_harness_fails_before_stdio(monkeypatch):
+    real_import = host.importlib.import_module
+
+    def missing_dependency(name):
+        if name == "browser_harness.admin":
+            raise ModuleNotFoundError("private dependency details")
+        return real_import(name)
+
+    monkeypatch.setattr(host.importlib, "import_module", missing_dependency)
+    factory = Mock()
+    result = asyncio.run(host.run(host.parser().parse_args(["--preflight"]), client_factory=factory,
+                                  environ={"OPENROUTER_API_KEY": "unused"}))
+    assert result["ok"] is False and result["error"] == "browser_harness_unavailable"
+    assert result["browser"] == "not contacted" and result["provider_calls"] == 0
+    assert "uv" in result["next"] and "private" not in json.dumps(result)
+    factory.assert_not_called()
+
+
+def test_preflight_wrong_browser_harness_version_fails_before_stdio(monkeypatch):
+    monkeypatch.setattr(host.importlib.metadata, "version", lambda name: "0.1.12")
+    factory = Mock()
+    result = asyncio.run(host.run(host.parser().parse_args(["--preflight"]), client_factory=factory))
+    assert result["ok"] is False and result["error"] == "browser_harness_version_mismatch"
+    assert result["installed_version"] == "0.1.12"
+    assert result["expected_version"] == "0.1.13"
+    assert result["browser"] == "not contacted" and result["provider_calls"] == 0
+    factory.assert_not_called()
+
+
+def test_preflight_dependency_failure_is_json_and_exit_two(monkeypatch, capsys):
+    monkeypatch.setattr(host, "check_browser_harness", lambda: {
+        "ok": False, "error": "browser_harness_unavailable", "next": host.BROWSER_HARNESS_REPAIR,
+    })
+    assert host.main(["--preflight"]) == 2
+    result = json.loads(capsys.readouterr().out)
+    assert result["error"] == "browser_harness_unavailable"
+    assert result["browser"] == "not contacted" and result["provider_calls"] == 0
 
 
 def test_launch_parameters_and_minimum_environment():
@@ -72,10 +113,19 @@ def test_launch_parameters_and_minimum_environment():
 
 
 def test_only_selected_keys_are_forwarded():
-    env = {"OPENROUTER_API_KEY": "test-openrouter", "CEREBRAS_API_KEY": "test-cerebras", "OTHER_KEY": "test-other"}
-    assert host.child_environment("jev_qwen_openrouter", env) == {"OPENROUTER_API_KEY": "test-openrouter"}
+    env = {
+        "TYPESAFE_API_KEY": "test-typesafe", "OPENROUTER_API_KEY": "test-openrouter",
+        "CEREBRAS_API_KEY": "test-cerebras", "OTHER_KEY": "test-other",
+    }
+    assert host.child_environment("jev_qwen_openrouter", env) == {
+        "OPENROUTER_API_KEY": "test-openrouter", "CEREBRAS_API_KEY": "test-cerebras",
+    }
+    assert host.child_environment("jev_qwen_openrouter", {"OPENROUTER_API_KEY": "test-openrouter"}) == {
+        "OPENROUTER_API_KEY": "test-openrouter",
+    }
     assert host.child_environment("qwen", env) == {"CEREBRAS_API_KEY": "test-cerebras"}
     assert set(host.child_environment("jev_qwen", env)) == {"OPENROUTER_API_KEY", "CEREBRAS_API_KEY"}
+    assert host.parser().parse_args([]).profile == "jev_qwen_openrouter"
 
 
 def test_missing_key_fails_before_launch(args):
@@ -103,13 +153,18 @@ def test_cli_rejects_unscoped_or_unbounded_input(arguments):
 
 class BrowserDouble:
     def __init__(self, url):
-        self.url, self.closed, self.mutations = url, False, 0
+        self.url, self.closed, self.mutations, self.observations = url, False, 0, 0
         self.result = {"heading": "Preference saved", "paragraphs": ["Express"]}
 
     def evaluate(self, expression):
-        return self.url if expression == "location.href" else self.result
+        if expression == "location.href":
+            return self.url
+        if "fixture_result" in expression:
+            return {"url": self.url, "fixture_result": self.result}
+        return self.result
 
     def observe(self, **_):
+        self.observations += 1
         return {"url": self.url, "fingerprint": "fixture"}
 
     def close(self):
@@ -167,6 +222,41 @@ def test_done_alone_is_not_success(args):
 
     result = trial(args, FalseDone)
     assert result["status"] == "done" and not result["success"] and not result["verified"]
+
+
+def test_verified_fixture_outcome_stops_before_another_model_decision(args):
+    class VerifiedAfterAction(AgentDouble):
+        def run(self):
+            self.browser.before_action()
+            self.browser.mutations += 1
+            self.state["history"].append({"kind": "click"})
+            self.state["status"] = "ready"
+            yield self.state
+            raise AssertionError("A verified fixture should not need a DONE model call")
+
+    result = trial(args, VerifiedAfterAction)
+    assert result["success"] and result["verified"] and result["status"] == "done"
+    assert result["verified_before_done_decision"] is True
+    assert VerifiedAfterAction.instances[-1].browser.mutations == 1
+    assert VerifiedAfterAction.instances[-1].browser.observations == 1
+
+
+def test_unverified_intermediate_state_keeps_running(args):
+    class Intermediate(AgentDouble):
+        def run(self):
+            self.browser.result = {"heading": "Choose a delivery speed", "paragraphs": []}
+            self.state["history"].append({"kind": "click"})
+            self.state["status"] = "ready"
+            yield self.state
+            self.browser.result = {"heading": "Preference saved", "paragraphs": ["Express"]}
+            self.state["history"].append({"kind": "click"})
+            self.state["status"] = "ready"
+            yield self.state
+            raise AssertionError("A verified fixture should stop after its second action")
+
+    result = trial(args, Intermediate)
+    assert result["success"] and result["verified"]
+    assert len(Intermediate.instances[-1].state["history"]) == 2
 
 
 def test_mutation_failure_is_never_retried_and_tab_is_closed(args):
@@ -286,7 +376,9 @@ def test_async_cancellation_joins_worker_before_closing_transport(args):
 
     async def run():
         task = asyncio.create_task(host.run(args, client_factory=factory, agent_factory=SlowAgent,
-                                           control=control, environ={"OPENROUTER_API_KEY": "offline"}))
+                                           control=control, environ={
+                                               "OPENROUTER_API_KEY": "offline", "CEREBRAS_API_KEY": "offline"
+                                           }))
         assert await asyncio.to_thread(started.wait, 3)
         task.cancel()
         with pytest.raises(asyncio.CancelledError):

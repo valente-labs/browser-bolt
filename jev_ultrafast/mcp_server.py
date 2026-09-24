@@ -13,11 +13,13 @@ import httpx
 from . import comparators, model
 
 MAX_PAYLOAD_BYTES = 96_000
+DEFAULT_PROFILE = "jev_qwen_openrouter"
 PROFILE_NAMES = (
-    "jev_qwen_openrouter",
+    DEFAULT_PROFILE,
+    "jev_qwen",
+    "jev_qwen_openrouter_fast",
     "qwen_openrouter",
     "jev",
-    "jev_qwen",
     "qwen",
     "jev_astra",
     "astra",
@@ -202,11 +204,18 @@ def list_profiles():
                 "field_text": name != "jev",
                 "inline_text": not name.startswith("jev"),
                 "decision_fallback": False,
+                **({
+                    "optional_environment": ["CEREBRAS_API_KEY"],
+                } if name == "jev_qwen_openrouter" else {}),
+                **({
+                    "provider_routing": {"sort": "throughput", "require_parameters": True},
+                    "note": "Unmeasured optional OpenRouter Qwen field writer; no provider pin, including Cerebras.",
+                } if name == "jev_qwen_openrouter_fast" else {}),
             }
         )
     return {
         "ok": True,
-        "default_profile": "jev_qwen_openrouter",
+        "default_profile": DEFAULT_PROFILE,
         "profiles": profiles,
         "browser_execution": False,
         "screenshots": False,
@@ -353,7 +362,7 @@ def create_server(service_factory=DecisionService):
 
     return Server(
         "Jev Qwerebras",
-        version="0.1.0",
+        version="0.1.1",
         instructions=INSTRUCTIONS,
         lifespan=lifespan,
         on_list_tools=tools_list,

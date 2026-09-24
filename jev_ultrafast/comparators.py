@@ -1,6 +1,7 @@
 """Explicit, isolated benchmark profiles. No environment mutation or decision fallback."""
 
 import json
+import math
 import os
 import time
 from dataclasses import dataclass, field
@@ -22,12 +23,14 @@ PROFILE_NAMES = (
     "jev",
     "qwen_openrouter",
     "jev_qwen_openrouter",
+    "jev_qwen_openrouter_fast",
 )
 CHAT_MODELS = {
     "qwen": "qwen-3.8-27b",
     "astra": "openai/gpt-6-astra",
     "opus": "anthropic/claude-opus-5",
     "qwen_openrouter": "qwen/qwen3.8-27b",
+    "qwen_openrouter_fast": "qwen/qwen3.8-27b",
 }
 OPENROUTER_CHAT_URL = "https://openrouter.ai/api/v1/chat/completions"
 
@@ -39,6 +42,14 @@ class ProviderConfig:
     model: str
     key: str = field(repr=False)
     reasoning: str | None = None
+    throughput_priority: bool = False
+
+    @property
+    def provider_preferences(self):
+        """Fixed routing contract; never merge arbitrary provider options into requests."""
+        if self.provider == "openrouter" and self.throughput_priority:
+            return {"sort": "throughput", "require_parameters": True}
+        return {}
 
 
 def _usage(value):
@@ -49,6 +60,31 @@ def _usage(value):
         key: _usage(item) if isinstance(item, dict) else item
         for key, item in value.items()
         if isinstance(key, str) and (isinstance(item, dict) or (type(item) in (int, float) and -(2**63) < item < 2**63))
+    }
+
+
+def _bounded_usage(value, *, details=False):
+    """Keep bounded numeric accounting, never arbitrary provider fields or keys."""
+    if not isinstance(value, dict):
+        return {}
+    allowed = {
+        "prompt_tokens",
+        "completion_tokens",
+        "total_tokens",
+        "input_tokens",
+        "output_tokens",
+        "cost",
+        "cached_tokens",
+        "reasoning_tokens",
+        "cache_read_input_tokens",
+        "cache_creation_input_tokens",
+    }
+    nested = {"prompt_tokens_details", "completion_tokens_details", "input_tokens_details", "output_tokens_details"}
+    return {
+        key: _bounded_usage(item, details=True) if key in nested else item
+        for key, item in value.items()
+        if (not details and key in nested and isinstance(item, dict))
+        or (key in allowed and type(item) in (int, float) and 0 <= item < 2**63 and math.isfinite(item))
     }
 
 
@@ -80,7 +116,8 @@ class Profile:
     """A pinned decision model and optional writer sharing one bounded connection pool.
 
     Use as a context manager, or call close(). A supplied client remains caller-owned,
-    allowing a benchmark cohort to reuse connections across profiles.
+    allowing a benchmark cohort to reuse connections across profiles. Requests honor
+    that client's timeout policy; owned clients retain the benchmark defaults.
     """
 
     def __init__(self, name, decision, writer, *, client=None):
@@ -121,14 +158,14 @@ class Profile:
                 config.endpoint,
                 json=body,
                 headers={"Authorization": f"Bearer {config.key}"},
-                timeout=httpx.Timeout(30, connect=5),
             )
             call["http_status"] = response.status_code
             try:
                 result = response.json()
             except ValueError:
                 raise ValueError("Model provider returned invalid JSON; no action executed.") from None
-            call["usage"] = _usage(result.get("usage")) if isinstance(result, dict) else {}
+            usage = _bounded_usage if config.throughput_priority else _usage
+            call["usage"] = usage(result.get("usage")) if isinstance(result, dict) else {}
             if response.is_error:
                 raise RuntimeError(f"Model provider returned HTTP {response.status_code}; no action executed.")
             parsed = parse(result)
@@ -200,6 +237,7 @@ class Profile:
             "max_tokens": max_tokens,
             "response_format": response_format,
             **reasoning,
+            **({"provider": config.provider_preferences} if config.provider_preferences else {}),
             "messages": [{"role": "system", "content": system}, {"role": "user", "content": json.dumps(context)}],
         }
 
@@ -368,7 +406,7 @@ class Profile:
             payload = json.loads(result["choices"][0]["message"]["content"])
             if not isinstance(payload, dict) or set(payload) != {"text"} or not _valid_text(payload["text"]):
                 raise ValueError()
-            return payload["text"]
+            return payload["text"].strip()
 
         return self._request(self.writer, body, parse, "field_text")
 
@@ -404,10 +442,18 @@ def get_profile(name, *, environ: Mapping[str, str] | None = None, client=None, 
             OPENROUTER_CHAT_URL,
             CHAT_MODELS[arm],
             key("OPENROUTER_API_KEY"),
-            "none" if arm == "qwen_openrouter" else "low",
+            "none" if arm in {"qwen_openrouter", "qwen_openrouter_fast"} else "low",
+            throughput_priority=arm == "qwen_openrouter_fast",
         )
 
-    writer = chat_config(name[4:]) if name.startswith("jev_") else None
+    # A single OpenRouter key remains sufficient for the standard fallback path.
+    # When a Cerebras key is also present, send standard OpenRouter-pair Qwen
+    # text directly to Cerebras. The fast profile stays explicitly OpenRouter.
+    writer_arm = name[4:] if name.startswith("jev_") else None
+    if name == "jev_qwen_openrouter" and isinstance(env.get("CEREBRAS_API_KEY"), str) \
+            and env["CEREBRAS_API_KEY"].strip():
+        writer_arm = "qwen"
+    writer = chat_config(writer_arm) if writer_arm else None
     if name == "jev" or name.startswith("jev_"):
         if jev_provider == "openrouter":
             decision = ProviderConfig(
