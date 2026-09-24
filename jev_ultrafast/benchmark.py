@@ -10,6 +10,7 @@ import re
 import statistics
 import threading
 import time
+from collections import Counter
 from contextlib import ExitStack, contextmanager
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from importlib.metadata import PackageNotFoundError, version
@@ -29,6 +30,7 @@ PROFILES = (
     "jev",
     "qwen_openrouter",
     "jev_qwen_openrouter",
+    "jev_qwen_openrouter_fast",
 )
 DEFAULT_PROFILES = PROFILES[:6]
 GOALS = {
@@ -168,6 +170,9 @@ def evidence_metadata(profiles, fixtures):
                 if config is not None
                 else None
             )
+            preferences = getattr(config, "provider_preferences", {})
+            if preferences:
+                configurations[name][role]["provider_routing"] = preferences
     versions = {}
     for package in ("jev-qwerebras-ultrafast", "browser-harness", "httpx"):
         try:
@@ -225,6 +230,11 @@ def clean_call(call):
     """Allowlist accounting fields; provider payloads, prompts and exception text stay out."""
     usage = call.get("usage") or {}
     clean = {key: call[key] for key in ("provider", "model", "success") if key in call}
+    if call.get("role") in {"decision", "field_text"}:
+        clean["role"] = call["role"]
+    status = call.get("http_status")
+    if type(status) is int and 100 <= status <= 599:
+        clean["http_status"] = status
     clean["latency_ms"] = number(call.get("latency_ms"))
     clean["usage"] = {
         key: number(usage[key])
@@ -264,6 +274,7 @@ def state_metrics(state):
         )
     text_calls = [clean_call(call) for call in state.get("text_calls", []) if not call.get("included_in_decision")]
     calls.extend(text_calls)
+    # This is an accounting grouping, not the order in which provider calls occurred.
     unknown = sum(call["cost_usd"] is None for call in calls)
     return {
         "decisions": decisions,
@@ -271,6 +282,11 @@ def state_metrics(state):
         "model_calls": calls,
         "model_call_count": len(calls),
         "action_count": len(state.get("history", [])),
+        "tick_count": number(state.get("ticks")),
+        "fallback_count": sum(d.get("routing", {}).get("fallback") is True for d in state.get("decisions", [])),
+        # Neither Agent nor Browser exposes these counters. Extra decisions are not retries.
+        "provider_retry_count": None,
+        "reobservation_count": None,
         "unknown_cost_call_count": unknown,
         "reported_cost_usd": sum(call["cost_usd"] for call in calls if call["cost_basis"] == "reported"),
         "estimated_cerebras_cost_usd": sum(
@@ -281,7 +297,13 @@ def state_metrics(state):
 
 
 def run_trial(trial, base_url, profile, agent_factory):
-    row = {**trial, "status": "setup_failed", "success": False, "verified": False}
+    row = {
+        **trial,
+        "status": "setup_failed",
+        "success": False,
+        "verified": False,
+        "terminal_model_call": None,
+    }
     agent = None
     setup_started = time.perf_counter()
     loop_started = None
@@ -299,12 +321,22 @@ def run_trial(trial, base_url, profile, agent_factory):
                 pass
         except Exception as error:
             row["error_type"] = type(error).__name__
+            # Preserve the actual terminal call; state_metrics groups decisions before writers.
+            terminal = getattr(error, "model_call", None)
+            routed = (getattr(error, "routing", None) or {}).get("model_calls", [])
+            if terminal is None and routed:
+                terminal = routed[-1]
+            if isinstance(terminal, dict) and terminal.get("success") is False:
+                row["terminal_model_call"] = clean_call(terminal)
         # Even blocked/failed attempts get an independent read, without any mutation retry.
         try:
             row["verified"] = verify(trial["task"], observe_result(agent.browser))
         except Exception as error:
             row["verification_error_type"] = type(error).__name__
         row["status"] = agent.state.get("status", "unknown")
+        reason = agent.state.get("stop_reason")
+        if reason in {"cancelled", "deadline_exceeded", "tick_budget_exhausted", "duplicate_mutation"}:
+            row["stop_reason"] = reason
         row["success"] = row["status"] == "done" and row["verified"] and "error_type" not in row
     except Exception as error:
         row["error_type"] = type(error).__name__
@@ -318,8 +350,76 @@ def run_trial(trial, base_url, profile, agent_factory):
                 agent.close()
             except Exception as error:
                 row["cleanup_error_type"] = type(error).__name__
+                row["success"] = False
         row["wall_seconds"] = time.perf_counter() - setup_started
+    row["outcome"] = outcome(row)
+    row["failure_category"] = failure_category(row)
     return row
+
+
+def outcome(row):
+    if row.get("status") in {"running", "interrupted"}:
+        return row["status"]
+    # Old consumers may supply success-only rows; an explicit false verifier always wins.
+    if (
+        row.get("success")
+        and row.get("verified", True)
+        and row.get("status", "done") == "done"
+        and not row.get("error_type")
+        and not row.get("cleanup_error_type")
+    ):
+        return "verified_success"
+    return "failure"
+
+
+def failure_category(row):
+    """Classify only observed structured evidence, never parse exception messages."""
+    result = outcome(row)
+    if result != "failure":
+        return result if result == "interrupted" else None
+    if row.get("cleanup_error_type"):
+        return "cleanup_failed"
+    if row.get("status") == "setup_failed":
+        return "setup_failed"
+    if row.get("stop_reason") in {"cancelled", "deadline_exceeded", "tick_budget_exhausted", "duplicate_mutation"}:
+        return row["stop_reason"]
+    calls = row.get("model_calls", [])
+    # Explicit null means the terminal exception was not a recorded provider failure.
+    # Keep the legacy list-only path for callers without terminal exception evidence.
+    terminal = row.get("terminal_model_call", calls[-1] if calls else None)
+    if terminal and terminal.get("success") is False and (row.get("error_type") or row.get("status") != "done"):
+        status = terminal.get("http_status")
+        if status in {401, 403}:
+            return "provider_auth"
+        if status == 429:
+            return "provider_rate_limit"
+        if type(status) is int and 500 <= status <= 599:
+            return "provider_server"
+        if type(status) is int and 400 <= status <= 499:
+            return "provider_http"
+        if type(status) is int and 200 <= status <= 299:
+            return "provider_response_rejected"
+        return "provider_failure_unknown"
+    if row.get("verification_error_type"):
+        return "verification_error"
+    if row.get("error_type"):
+        return "runtime_error"
+    if row.get("status") == "done":
+        return "verification_failed"
+    return "blocked" if row.get("status") == "blocked" else "unknown"
+
+
+def distribution(values):
+    """Observed distribution; avoid presenting tiny cohorts as tail-latency evidence."""
+    values = sorted(value for value in values if number(value) is not None)
+    count = len(values)
+    return {
+        "sample_count": count,
+        "min": min(values) if values else None,
+        "p50": statistics.median(values) if values else None,
+        "p95": values[math.ceil(count * 0.95) - 1] if count >= 20 else None,
+        "max": max(values) if values else None,
+    }
 
 
 def summarize(rows):
@@ -327,15 +427,28 @@ def summarize(rows):
     groups = sorted({(row["profile"], row["task"]) for row in rows})
     for profile, task in groups:
         attempts = [row for row in rows if row["profile"] == profile and row["task"] == task]
-        successes = [row for row in attempts if row.get("success")]
+        successes = [row for row in attempts if outcome(row) == "verified_success"]
+        failures = [row for row in attempts if outcome(row) == "failure"]
+        outcomes = Counter(outcome(row) for row in attempts)
+        completed = len(successes) + len(failures)
         costs = [row.get("total_cost_usd") for row in attempts]
         total = sum(costs) if all(cost is not None for cost in costs) else None
         summary = {
             "profile": profile,
             "task": task,
             "sample_count": len(attempts),
+            "attempted_count": len(attempts),
+            "completed_count": completed,
+            "verified_success_count": len(successes),
+            "failure_count": len(failures),
+            "interrupted_count": outcomes["interrupted"],
+            "running_count": outcomes["running"],
+            "verified_success_rate_completed": len(successes) / completed if completed else None,
+            "failure_category_counts": dict(Counter(failure_category(row) for row in failures)),
+            "process_trial_counts": dict(Counter(row.get("process_trial", "unknown") for row in attempts)),
             "success_count": len(successes),
             "success_rate": len(successes) / len(attempts),
+            "verified_success_rate_attempted": len(successes) / len(attempts),
             "total_cost_usd": total,
             "known_cost_subtotal_usd": sum(
                 (row.get("reported_cost_usd", 0) + row.get("estimated_cerebras_cost_usd", 0))
@@ -347,16 +460,29 @@ def summarize(rows):
             "cost_per_attempt_usd": total / len(attempts) if total is not None else None,
             "cost_per_verified_success_usd": total / len(successes) if total is not None and successes else None,
         }
+        summary["timing_distributions"] = {}
         for metric in ("setup_seconds", "task_seconds", "wall_seconds"):
+            summary["timing_distributions"][metric] = {
+                label: distribution([row.get(metric) for row in group])
+                for label, group in (("all", attempts), ("successful", successes), ("failed", failures))
+            }
             for label, group in (("all", attempts), ("successful", successes)):
                 values = [row[metric] for row in group if number(row.get(metric)) is not None]
                 summary[f"median_{metric}_{label}"] = statistics.median(values) if values else None
                 summary[f"{metric}_{label}_sample_count"] = len(values)
+        summary["model_call_latency_ms"] = distribution(
+            [call.get("latency_ms") for row in attempts for call in row.get("model_calls", [])]
+        )
+        for metric in ("provider_retry_count", "reobservation_count", "tick_count", "fallback_count"):
+            values = [number(row.get(metric)) for row in attempts]
+            summary[metric] = sum(values) if all(value is not None for value in values) else None
+            summary[f"{metric}_sample_count"] = sum(value is not None for value in values)
         summaries.append(summary)
     return summaries
 
 
 def save_results(path, result):
+    result["reporting_version"] = 2
     result["summaries"] = summarize(result["rows"])
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_name(path.name + ".tmp")
@@ -446,7 +572,14 @@ def main(argv=None):
             from .agent import Agent
 
             with fixture_server(fixtures) as base_url:
-                for trial in pending:
+                for index, trial in enumerate(pending):
+                    trial = {
+                        **trial,
+                        "process_trial": "first_in_process" if index == 0 else "subsequent_in_process",
+                        "provider_client": "shared_pool",
+                        "connection_reuse_observed": None,
+                        "process_startup_seconds": None,
+                    }
                     result["rows"].append({**trial, "status": "running", "success": False, "total_cost_usd": None})
                     save_results(path, result)
                     row = run_trial(trial, base_url, profiles[trial["profile"]], Agent)

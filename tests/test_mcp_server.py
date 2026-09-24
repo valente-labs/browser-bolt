@@ -63,7 +63,16 @@ def test_list_profiles_requires_neither_keys_nor_requests():
     svc = server.DecisionService(client=Mock(), environ={})
     result = svc.invoke("list_profiles", {})
     assert result["default_profile"] == "jev_qwen_openrouter"
-    assert len(result["profiles"]) == 9
+    profiles = {item["profile"]: item for item in result["profiles"]}
+    assert profiles["jev_qwen"]["required_environment"] == ["OPENROUTER_API_KEY", "CEREBRAS_API_KEY"]
+    assert profiles["jev_qwen_openrouter"]["required_environment"] == ["OPENROUTER_API_KEY"]
+    assert profiles["jev_qwen_openrouter"]["optional_environment"] == ["CEREBRAS_API_KEY"]
+    assert profiles["jev_qwen_openrouter_fast"]["provider_routing"] == {
+        "sort": "throughput",
+        "require_parameters": True,
+    }
+    assert "no provider pin" in profiles["jev_qwen_openrouter_fast"]["note"]
+    assert len(result["profiles"]) == 10
     assert not result["browser_execution"] and not result["screenshots"]
     svc.client.post.assert_not_called()
 

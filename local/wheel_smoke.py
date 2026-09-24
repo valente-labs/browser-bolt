@@ -24,9 +24,14 @@ async def main():
             "write_browser_field",
         }
         result = await client.call_tool("list_profiles", {})
-        assert result.structured_content["default_profile"] == "jev_qwen_openrouter"
         assert not result.is_error
-    print(json.dumps({"wheel_assets": "passed", "stdio_initialize_list_call": "passed", "profiles": 9}))
+        content = result.structured_content
+        assert content["default_profile"] == "jev_qwen_openrouter"
+        profiles = {item["profile"]: item for item in content["profiles"]}
+        assert len(profiles) == len(content["profiles"]) == 10
+        assert profiles["jev_qwen"]["required_environment"] == ["OPENROUTER_API_KEY", "CEREBRAS_API_KEY"]
+        assert profiles["jev_qwen_openrouter"]["required_environment"] == ["OPENROUTER_API_KEY"]
+    print(json.dumps({"wheel_assets": "passed", "stdio_initialize_list_call": "passed", "profiles": 10}))
 
 
 if __name__ == "__main__":

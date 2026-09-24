@@ -226,6 +226,80 @@ def test_loading_waits_do_not_trigger_no_progress_stop(runner):
     assert len(runner.state["history"]) == 5 and runner.state["status"] == "ready"
 
 
+@pytest.mark.parametrize("kind", ["click", "select"])
+@pytest.mark.parametrize("wait_between", [False, True])
+def test_new_decision_cannot_repeat_mutation_on_unchanged_page(runner, kind, wait_between):
+    p = runner.state["page"]
+    p["actions"][2].update(kind=kind, value="confirmed" if kind == "select" else "")
+    p["fingerprint"] = fingerprint(p)
+    runner.decision_fn = Mock(return_value=decision("e3"))
+    runner.command("tick")
+    if wait_between:
+        runner.state["decision"] = decision("wait")
+        runner.command("act", {"fingerprint": p["fingerprint"]})
+    snapshot = runner.command("tick")
+    mutations = [c for c in runner.state["browser"].act.call_args_list if c.args[0]["kind"] != "wait"]
+    assert len(mutations) == 1
+    assert len(snapshot["history"]) == 1 + int(wait_between)
+    assert snapshot["status"] == "blocked"
+    assert snapshot["stop_reason"] == "duplicate_mutation"
+    assert snapshot["decision"] is None
+    assert list(runner.run()) == []
+    assert runner.decision_fn.call_count == 2
+
+
+def test_duplicate_guard_survives_failed_post_action_observation(runner):
+    runner.decision_fn = Mock(return_value=decision("e3"))
+    runner.state["browser"].observe.side_effect = StalePage("Observation unavailable")
+    runner.command("tick")
+    assert runner.state["history"][0]["page_changed"] is None
+    runner.state["browser"].observe.side_effect = None
+    snapshot = runner.command("tick")
+    runner.state["browser"].act.assert_called_once()
+    assert len(snapshot["history"]) == 1
+    assert snapshot["stop_reason"] == "duplicate_mutation"
+
+
+@pytest.mark.parametrize("change_after_decision", [False, True])
+def test_duplicate_guard_allows_action_after_changed_observation(runner, change_after_decision):
+    runner.decision_fn = Mock(return_value=decision("e3"))
+    runner.command("tick")
+    changed = deepcopy(runner.state["page"])
+    changed["text"] = "A new confirmation is ready"
+    changed["fingerprint"] = fingerprint(changed)
+    runner.state["browser"].observe.return_value = changed
+    runner.state["browser"].fresh.side_effect = [True, False] if change_after_decision else [False]
+    snapshot = runner.command("tick")
+    if change_after_decision:
+        assert snapshot["status"] == "ready"
+        assert snapshot["decision"] is None
+        assert snapshot["page"] == changed
+        runner.state["browser"].act.assert_called_once()
+        runner.state["browser"].fresh.side_effect = None
+        snapshot = runner.command("tick")
+    assert snapshot["status"] == "ready"
+    assert runner.state["browser"].act.call_count == 2
+    assert len(snapshot["history"]) == 2
+
+
+def test_duplicate_guard_allows_different_target_on_unchanged_page(runner):
+    runner.decision_fn = Mock(side_effect=[decision("e3"), decision("e2")])
+    runner.command("tick")
+    snapshot = runner.command("tick")
+    assert runner.state["browser"].act.call_count == 2
+    assert snapshot["status"] == "ready"
+
+
+def test_duplicate_guard_does_not_record_rejected_stale_action(runner):
+    runner.decision_fn = Mock(return_value=decision("e3"))
+    runner.state["browser"].act.side_effect = [StalePage("Before input"), None]
+    runner.command("tick")
+    assert runner.state["history"] == []
+    snapshot = runner.command("tick")
+    assert len(snapshot["history"]) == 1
+    assert snapshot["status"] == "ready"
+
+
 def test_stale_observation_preserves_executed_action(runner):
     runner.state["decision"] = decision("e3")
     runner.state["browser"].observe.side_effect = StalePage("changed")
