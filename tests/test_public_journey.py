@@ -2,9 +2,7 @@
 
 import hashlib
 import json
-import os
 import shutil
-import subprocess
 import sys
 import threading
 from functools import partial
@@ -90,15 +88,70 @@ def test_manifest_identity_and_package_hashes_are_required():
             journey.manifest_files(json.dumps({**manifest(), field: wrong}), plan())
 
 
-def test_rendered_page_requires_wheel_link_and_rejects_account_forms():
-    page = '<html data-distribution="static"><h1>Give your host a faster decision path.</h1>'
-    good = page + '<a href="' + plan()["wheel_url"] + '">Wheel</a></html>'
-    journey.check_page(good.encode(), "start", plan()["wheel_url"])
-    for extra in ["<form></form>", '<input type="password">', '<a href="/signup">Sign up</a>']:
+def install_line(wheel_url):
+    return "uv tool install --python 3.12 'jev-qwerebras-ultrafast[mcp] @ " + wheel_url + "#sha256=" + SHA + "'"
+
+
+def install_command(wheel_url):
+    return '<pre id="install-command"><code>' + install_line(wheel_url) + "</code></pre>"
+
+
+def live_start_page(wheel_url):
+    # Live /start/ shape: the install command element, plus the embedded AGENT.md prompt repeating the same URL.
+    return ('<html><head><title>Get Browser Bolt | Browser Bolt</title></head><body>'
+            '<h1>Let your agent install Browser Bolt.</h1>'
+            '<div>' + install_command(wheel_url) + '<button type="button" data-copy-target="install-command">'
+            'Copy install command</button></div>'
+            '<textarea id="setup-prompt" readonly># Install Browser Bolt for this project\n'
+            + install_line(wheel_url) + "\n</textarea></body></html>")
+
+
+def test_rendered_setup_page_requires_the_pinned_wheel_command_and_rejects_account_forms():
+    wheel_url = plan()["wheel_url"]
+    good = live_start_page(wheel_url)
+    journey.check_page(good.encode(), "start", wheel_url)
+    for extra in ["<form></form>", '<input type="password">', '<a href="/signup">Sign up</a>',
+                  '<button data-billing="checkout">Pay</button>']:
         with pytest.raises(MonitorError, match="rendered_page_mismatch"):
-            journey.check_page((good + extra).encode(), "start", plan()["wheel_url"])
+            journey.check_page(good.replace("</body>", extra + "</body>").encode(), "start", wheel_url)
+    for broken in [good.replace(wheel_url, wheel_url.replace("v0.1.0", "v0.0.9")),
+                   good.replace("Let your agent install Browser Bolt.", "Welcome")]:
+        with pytest.raises(MonitorError, match="rendered_page_mismatch"):
+            journey.check_page(broken.encode(), "start", wheel_url)
+
+
+def test_install_command_element_may_nest_same_named_tags():
+    wheel_url = plan()["wheel_url"]
+    nested = ('<div id="install-command"><div>Run this:</div><div><code>' + install_line(wheel_url)
+              + "</code></div></div>")
+    page = live_start_page(wheel_url).replace(install_command(wheel_url), nested)
+    journey.check_page(page.encode(), "start", wheel_url)
+
+
+@pytest.mark.parametrize("replacement", [
+    pytest.param(lambda url: "", id="command-missing-prompt-still-has-url"),
+    pytest.param(lambda url: install_command(url.replace("v0.1.0", "v0.0.9")), id="stale-command-current-prompt"),
+    pytest.param(lambda url: install_command(url).replace(' id="install-command"', ""), id="command-lost-its-id"),
+    pytest.param(lambda url: '<a href="' + url + '">Wheel</a>', id="bare-link-is-not-a-command"),
+    pytest.param(lambda url: '<pre id="install-command"><code>uv tool install</code></pre><p>' + url + "</p>",
+                 id="url-after-the-command-closes"),
+])
+def test_wheel_url_counts_only_inside_the_install_command(replacement):
+    wheel_url = plan()["wheel_url"]
+    good = live_start_page(wheel_url)
+    broken = good.replace(install_command(wheel_url), replacement(wheel_url))
+    assert broken != good and install_line(wheel_url) in broken  # the agent prompt still carries the pinned URL
     with pytest.raises(MonitorError, match="rendered_page_mismatch"):
-        journey.check_page(page.encode(), "start", plan()["wheel_url"])
+        journey.check_page(broken.encode(), "start", wheel_url)
+
+
+def test_rendered_legal_pages_need_their_live_headings():
+    journey.check_page(b"<html><h1>Privacy</h1><p>Shelfwater LLC</p></html>", "privacy", plan()["wheel_url"])
+    journey.check_page(b"<html><h1>BYOK preview terms</h1></html>", "terms", plan()["wheel_url"])
+    with pytest.raises(MonitorError, match="rendered_page_mismatch"):
+        journey.check_page(b"<html><h1>Bring your key. Pay your provider.</h1></html>", "terms", plan()["wheel_url"])
+    with pytest.raises(KeyError):
+        journey.check_page(b"<html><h1>Pricing</h1></html>", "pricing", plan()["wheel_url"])
 
 
 def test_install_commands_pin_hashes_no_deps_and_remove_credentials(tmp_path, monkeypatch):
@@ -148,7 +201,7 @@ def test_real_child_timeout_and_output_are_redacted(tmp_path):
     assert "sentinel" not in str(error.value)
 
 
-def test_actual_chrome_renders_current_public_setup_privacy_pricing(tmp_path):
+def test_actual_chrome_renders_live_shaped_setup_privacy_terms(tmp_path):
     chrome = shutil.which("google-chrome")
     mac_chrome = Path("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
     if not chrome and mac_chrome.is_file():
@@ -156,10 +209,13 @@ def test_actual_chrome_renders_current_public_setup_privacy_pricing(tmp_path):
     if not chrome:
         pytest.skip("Local browser unavailable; production command fails closed in this condition")
     out = tmp_path / "site"
-    result = subprocess.run(["node", "site/build-static.mjs"], cwd=ROOT, capture_output=True, timeout=30,
-                            env={**os.environ, "STATIC_OUT": str(out), "BROWSER_BOLT_REPOSITORY": REPO,
-                                 "BROWSER_BOLT_RELEASE_TAG": "v0.1.0"})
-    assert result.returncode == 0, "static fixture build failed"
+    pages = {"start": live_start_page(plan()["wheel_url"]),
+             "privacy": "<!doctype html><html><head><title>Privacy</title></head><body><h1>Privacy</h1></body></html>",
+             "terms": ("<!doctype html><html><head><title>Terms</title></head>"
+                       "<body><h1>BYOK preview terms</h1></body></html>")}
+    for route, html in pages.items():
+        (out / route).mkdir(parents=True)
+        (out / route / "index.html").write_text(html)
 
     class Handler(SimpleHTTPRequestHandler):
         def log_message(self, *args):
@@ -170,7 +226,7 @@ def test_actual_chrome_renders_current_public_setup_privacy_pricing(tmp_path):
     thread.start()
     try:
         result = journey.browser_pages(f"http://127.0.0.1:{server.server_port}", plan()["wheel_url"], chrome, tmp_path)
-        assert result == {"rendered_setup_privacy_pricing": "passed"}
+        assert result == {"rendered_setup_privacy_terms": "passed"}
     finally:
         server.shutdown()
         server.server_close()

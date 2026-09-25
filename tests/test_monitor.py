@@ -159,10 +159,11 @@ def test_real_http_failure_and_recovery_stay_redacted():
         def do_GET(self):
             missing = self.path in {"/api/config", "/__browser_bolt_canary_missing__"}
             self.send_response(503 if state["bad"] else 404 if missing else 200)
-            self.send_header("Content-Security-Policy", "connect-src 'none'; frame-ancestors 'none'")
+            self.send_header("Content-Security-Policy",
+                             "default-src 'none'; connect-src 'self'; frame-ancestors 'none'")
             self.send_header("X-Content-Type-Options", "nosniff")
             self.end_headers()
-            body = b'data-distribution="static" Browser Bolt Jev sentinel-secret'
+            body = b"Browser Bolt Jev jev_qwerebras_ultrafast-0.1.0 sentinel-secret"
             if self.path == "/version.json":
                 body = json.dumps({"product": "Browser Bolt", "mode": "static-preview",
                                    "managedAvailable": False, "releaseId": RELEASE}).encode()

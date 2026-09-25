@@ -148,30 +148,36 @@ def command(args, *, cwd, env, timeout=45, limit=LIMIT, dom=False):
 class RenderedPage(HTMLParser):
     def __init__(self):
         super().__init__()
-        self.static = False
         self.forbidden = False
-        self.links = []
         self.headings = []
+        self.install_command = []
         self.in_heading = False
+        self.command_tag = None
+        self.command_depth = 0
 
     def handle_starttag(self, tag, attributes):
         attrs = dict(attributes)
-        self.static |= attrs.get("data-distribution") == "static"
         self.forbidden |= tag in {"form", "input"} or "data-billing" in attrs
         if tag == "a":
-            href = attrs.get("href", "")
-            self.links.append(href)
-            self.forbidden |= urllib.parse.urlsplit(href).path.rstrip("/") in {
+            self.forbidden |= urllib.parse.urlsplit(attrs.get("href", "")).path.rstrip("/") in {
                 "/signup", "/login", "/dashboard", "/launch", "/api/config"
             }
         if tag == "h1":
             self.in_heading = True
+        if self.command_depth:
+            self.command_depth += tag == self.command_tag
+        elif attrs.get("id") == "install-command":
+            self.command_tag, self.command_depth = tag, 1
 
     def handle_endtag(self, tag):
         if tag == "h1":
             self.in_heading = False
+        if self.command_depth and tag == self.command_tag:
+            self.command_depth -= 1
 
     def handle_data(self, data):
+        if self.command_depth:
+            self.install_command.append(data)
         if self.in_heading:
             self.headings.append(data)
 
@@ -182,16 +188,19 @@ def check_page(raw, route, wheel_url):
         parser.feed(raw.decode("utf-8"))
     except (UnicodeError, ValueError):
         raise MonitorError("invalid_rendered_page") from None
-    expected = {"start": "Give your host a faster decision path.", "privacy": "Privacy notice",
-                "pricing": "Bring your key. Pay your provider."}
-    if (not parser.static or parser.forbidden or expected[route] not in "".join(parser.headings)
-            or route == "start" and wheel_url not in parser.links):
+    expected = {"start": "Let your agent install Browser Bolt.", "privacy": "Privacy",
+                "terms": "BYOK preview terms"}
+    heading = expected[route]
+    # Only the install command counts: the embedded agent prompt repeats the URL and must not mask a lost command.
+    shows_wheel = wheel_url in "".join(parser.install_command)
+    if (parser.forbidden or heading not in "".join(parser.headings)
+            or route == "start" and not shows_wheel):
         raise MonitorError("rendered_page_mismatch")
 
 
 def browser_pages(base, wheel_url, chrome, directory, *, runner=command):
     env = clean_environment(directory)
-    for route in ("start", "privacy", "pricing"):
+    for route in ("start", "privacy", "terms"):
         result = runner([chrome, "--headless", "--disable-gpu", "--no-first-run", "--no-default-browser-check",
                          "--disable-background-networking", "--disable-sync", "--disable-extensions",
                          "--disable-component-update", "--disable-domain-reliability", "--no-proxy-server",
@@ -200,7 +209,7 @@ def browser_pages(base, wheel_url, chrome, directory, *, runner=command):
                          f"--user-data-dir={directory / ('chrome-' + route)}", f"{base}/{route}/"],
                         cwd=directory, env=env, timeout=30, dom=True)
         check_page(result, route, wheel_url)
-    return {"rendered_setup_privacy_pricing": "passed"}
+    return {"rendered_setup_privacy_terms": "passed"}
 
 
 def install_preflight(directory, wheel, requirements, uv, *, runner=command):

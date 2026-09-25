@@ -31,14 +31,26 @@ def validate_base(base, allow_loopback=False):
     return base.rstrip("/")
 
 
+def locked_csp(value):
+    """Deny by default, never framed, and fetch/XHR limited to the site itself (analytics) or nothing."""
+    directives = {}
+    for part in value.split(";"):
+        tokens = part.split()
+        if tokens:
+            directives.setdefault(tokens[0].lower(), tokens[1:])
+    return (directives.get("default-src") == ["'none'"]
+            and directives.get("frame-ancestors") == ["'none'"]
+            and directives.get("connect-src") in (["'none'"], ["'self'"]))
+
+
 def probe(base, expected_release, *, allow_loopback=False, timeout=5):
     base = validate_base(base, allow_loopback)
     if len(expected_release) != 64 or any(c not in "0123456789abcdef" for c in expected_release):
         raise ValueError("expected release must be a SHA-256 digest")
     checks = [
-        ("home", "/", 200, b'data-distribution="static"'),
-        ("setup", "/start/", 200, b'data-distribution="static"'),
-        ("brand", "/assets/brand.js", 200, b"Browser Bolt"),
+        ("home", "/", 200, b"Browser Bolt"),
+        ("setup", "/start/", 200, b"jev_qwerebras_ultrafast-"),
+        ("agent", "/AGENT.md", 200, b"Browser Bolt"),
         ("methods", "/docs/NATIVE_COMPARISON.md", 200, b"Jev"),
         ("version", "/version.json", 200, None),
         ("missing", "/__browser_bolt_canary_missing__", 404, None),
@@ -81,10 +93,8 @@ def probe(base, expected_release, *, allow_loopback=False, timeout=5):
                         reason = "invalid_version"
                 if reason == "ok" and expected_status == 200:
                     headers = response.headers
-                    csp = headers.get("Content-Security-Policy", "")
                     if (
-                        "connect-src 'none'" not in csp
-                        or "frame-ancestors 'none'" not in csp
+                        not locked_csp(headers.get("Content-Security-Policy", ""))
                         or headers.get("X-Content-Type-Options", "").lower() != "nosniff"
                     ):
                         reason = "security_headers"
